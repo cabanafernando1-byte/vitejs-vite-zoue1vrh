@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// Tipografía Lexend
+// Tipografía Lexend de Google Fonts
 const linkLexend = document.createElement('link');
 linkLexend.rel = 'stylesheet';
 linkLexend.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap';
@@ -9,21 +9,7 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Paleta oficial V0 (Atril oscuro #0b1120 + Acento Terracota)                */
-/* -------------------------------------------------------------------------- */
-const C = {
-  bg: '#0b1120',
-  card: '#121a2d',
-  soft: '#1a2438',
-  fg: '#eef0f5',
-  muted: '#8b94a8',
-  primary: '#e07a4f',
-  chord: '#f08a5d',
-  border: 'rgba(238, 240, 245, 0.08)',
-};
-
-/* -------------------------------------------------------------------------- */
-/*  Iconos de la Intro (Vectoriales exactos de tus instrumentos)              */
+/*  Iconos de la Intro                                                        */
 /* -------------------------------------------------------------------------- */
 const IconoGuitarra = () => (
   <svg width="120" height="120" viewBox="0 0 512 512" fill="none">
@@ -83,7 +69,7 @@ const IconoBateria = () => (
 );
 
 /* -------------------------------------------------------------------------- */
-/*  Motor de Notas y Transposición                                            */
+/*  Teoría y Transposición                                                    */
 /* -------------------------------------------------------------------------- */
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const FLAT_TO_SHARP = { Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#' };
@@ -103,13 +89,10 @@ function transposeChord(chord, steps) {
   });
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Cálculo Algorítmico de Acordes (CAGED / Cejillas)                         */
-/* -------------------------------------------------------------------------- */
 function calcularDiagramaAcorde(nombreAcorde) {
   if (!nombreAcorde) return null;
   const limpio = nombreAcorde.split('/')[0].trim();
-  const match = limpio.match(/^([A-G][b#]?)(.*)$/);
+  const match = limpio.match(/^([A-G][#b]?)(.*)$/);
   if (!match) return null;
 
   const [, raiz, tipo] = match;
@@ -168,7 +151,7 @@ function calcularDiagramaAcorde(nombreAcorde) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Componente Diagrama de Acordes SVG Estilo V0                              */
+/*  Diagrama Acorde con Tipografía Lexend                                     */
 /* -------------------------------------------------------------------------- */
 const STRINGS = 6;
 const FRETS = 4;
@@ -181,15 +164,15 @@ const GRID_H = H - PAD_TOP - 6;
 const STRING_GAP = GRID_W / (STRINGS - 1);
 const FRET_GAP = GRID_H / FRETS;
 
-function DiagramaAcordeV0({ name }) {
+function DiagramaAcordeLexend({ name, tema }) {
   const shape = calcularDiagramaAcorde(name) || { frets: [-1, -1, 0, 2, 3, 2] };
   const baseFret = shape.baseFret || 1;
 
   return (
     <figure
       style={{
-        background: C.card,
-        boxShadow: `inset 0 0 0 1px ${C.border}`,
+        background: tema.card,
+        boxShadow: `inset 0 0 0 1px ${tema.border}`,
         borderRadius: '12px',
         width: '76px',
         padding: '6px 4px 8px',
@@ -200,22 +183,22 @@ function DiagramaAcordeV0({ name }) {
         margin: 0
       }}
     >
-      <figcaption style={{ fontFamily: 'monospace', fontSize: '13px', fontWeight: '700', color: C.chord, marginBottom: '2px' }}>
+      <figcaption style={{ fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '700', color: tema.chord, marginBottom: '2px' }}>
         {name}
       </figcaption>
       <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H}>
         {baseFret === 1 ? (
-          <rect x={PAD_X - 1} y={PAD_TOP - 3} width={GRID_W + 2} height={3} rx={1} fill={C.fg} />
+          <rect x={PAD_X - 1} y={PAD_TOP - 3} width={GRID_W + 2} height={3} rx={1} fill={tema.fg} />
         ) : (
-          <text x={PAD_X - 5} y={PAD_TOP + FRET_GAP / 2 + 3} fontSize={8} fill={C.fg} opacity={0.6} textAnchor="middle" fontFamily="monospace">
+          <text x={PAD_X - 5} y={PAD_TOP + FRET_GAP / 2 + 3} fontSize={8} fill={tema.fg} opacity={0.6} textAnchor="middle" fontFamily="'Lexend', sans-serif" fontWeight="600">
             {baseFret}
           </text>
         )}
         {Array.from({ length: FRETS + 1 }).map((_, i) => (
-          <line key={`f${i}`} x1={PAD_X} x2={PAD_X + GRID_W} y1={PAD_TOP + i * FRET_GAP} y2={PAD_TOP + i * FRET_GAP} stroke={C.fg} strokeOpacity={0.35} strokeWidth={1} />
+          <line key={`f${i}`} x1={PAD_X} x2={PAD_X + GRID_W} y1={PAD_TOP + i * FRET_GAP} y2={PAD_TOP + i * FRET_GAP} stroke={tema.fg} strokeOpacity={0.35} strokeWidth={1} />
         ))}
         {Array.from({ length: STRINGS }).map((_, i) => (
-          <line key={`s${i}`} x1={PAD_X + i * STRING_GAP} x2={PAD_X + i * STRING_GAP} y1={PAD_TOP} y2={PAD_TOP + GRID_H} stroke={C.fg} strokeOpacity={0.5} strokeWidth={1} />
+          <line key={`s${i}`} x1={PAD_X + i * STRING_GAP} x2={PAD_X + i * STRING_GAP} y1={PAD_TOP} y2={PAD_TOP + GRID_H} stroke={tema.fg} strokeOpacity={0.5} strokeWidth={1} />
         ))}
         {shape.barre && (
           <rect
@@ -224,25 +207,22 @@ function DiagramaAcordeV0({ name }) {
             width={(shape.barre.to - shape.barre.from) * STRING_GAP + 6}
             height={7}
             rx={3.5}
-            fill={C.chord}
+            fill={tema.chord}
           />
         )}
         {shape.frets.map((fret, i) => {
           const x = PAD_X + i * STRING_GAP;
-          if (fret === -1) return <text key={`x${i}`} x={x} y={PAD_TOP - 4} fontSize={8} textAnchor="middle" fill={C.fg} opacity={0.5}>×</text>;
-          if (fret === 0) return <circle key={`o${i}`} cx={x} cy={PAD_TOP - 6} r={2.2} fill="none" stroke={C.fg} strokeOpacity={0.6} strokeWidth={1} />;
+          if (fret === -1) return <text key={`x${i}`} x={x} y={PAD_TOP - 4} fontSize={8} textAnchor="middle" fill={tema.fg} opacity={0.5} fontFamily="'Lexend', sans-serif">×</text>;
+          if (fret === 0) return <circle key={`o${i}`} cx={x} cy={PAD_TOP - 6} r={2.2} fill="none" stroke={tema.fg} strokeOpacity={0.6} strokeWidth={1} />;
           const inBarre = shape.barre && fret === shape.barre.fret && i >= shape.barre.from && i <= shape.barre.to;
           if (inBarre) return null;
-          return <circle key={`d${i}`} cx={x} cy={PAD_TOP + (fret - baseFret) * FRET_GAP + FRET_GAP / 2} r={3.8} fill={C.chord} />;
+          return <circle key={`d${i}`} cx={x} cy={PAD_TOP + (fret - baseFret) * FRET_GAP + FRET_GAP / 2} r={3.8} fill={tema.chord} />;
         })}
       </svg>
     </figure>
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Formato de Etiquetas y Render ChordPro                                    */
-/* -------------------------------------------------------------------------- */
 function formatearEtiqueta(himno) {
   if (!himno.numero || himno.numero.trim() === '') return '';
   const num = himno.numero.trim();
@@ -252,7 +232,7 @@ function formatearEtiqueta(himno) {
   return '';
 }
 
-function RenderLineaChordPro({ linea, semitonos }) {
+function RenderLineaChordPro({ linea, semitonos, tema }) {
   const lineaTrim = linea.trim();
   if (!lineaTrim) return <div style={{ height: '14px' }} />;
 
@@ -260,14 +240,14 @@ function RenderLineaChordPro({ linea, semitonos }) {
   if (esSeccion) {
     return (
       <div style={{
-        marginTop: '20px',
+        marginTop: '22px',
         marginBottom: '6px',
-        fontWeight: '700',
-        fontSize: '0.75em',
-        color: C.muted,
-        letterSpacing: '0.15em',
+        fontWeight: '800',
+        fontSize: '0.8em',
+        color: tema.muted,
+        letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        fontFamily: 'monospace'
+        fontFamily: "'Lexend', sans-serif"
       }}>
         {lineaTrim}
       </div>
@@ -277,7 +257,7 @@ function RenderLineaChordPro({ linea, semitonos }) {
   const palabras = linea.split(/(\s+)/);
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', minHeight: '36px', margin: '1px 0' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', minHeight: '38px', margin: '1px 0' }}>
       {palabras.map((palabra, pIdx) => {
         if (/^\s+$/.test(palabra)) {
           return <span key={pIdx} style={{ whiteSpace: 'pre' }}>{palabra}</span>;
@@ -301,10 +281,10 @@ function RenderLineaChordPro({ linea, semitonos }) {
               if (acordeActual) {
                 return (
                   <span key={fIdx} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
-                    <span style={{ fontSize: '0.85em', fontWeight: '700', color: C.chord, lineHeight: '1.2', fontFamily: 'monospace' }}>
+                    <span style={{ fontSize: '0.88em', fontWeight: '800', color: tema.chord, lineHeight: '1.2', fontFamily: "'Lexend', sans-serif" }}>
                       {transposeChord(acordeActual, semitonos)}
                     </span>
-                    <span style={{ lineHeight: '1.25', color: C.fg }}>
+                    <span style={{ lineHeight: '1.25', color: tema.fg, fontFamily: "'Lexend', sans-serif" }}>
                       {textoSilaba || '\u00A0'}
                     </span>
                   </span>
@@ -313,17 +293,17 @@ function RenderLineaChordPro({ linea, semitonos }) {
 
               return (
                 <span key={fIdx} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
-                  <span style={{ fontSize: '0.85em', lineHeight: '1.2', visibility: 'hidden' }}>.</span>
-                  <span style={{ lineHeight: '1.25', color: C.fg }}>{textoSilaba}</span>
+                  <span style={{ fontSize: '0.88em', lineHeight: '1.2', visibility: 'hidden', fontFamily: "'Lexend', sans-serif" }}>.</span>
+                  <span style={{ lineHeight: '1.25', color: tema.fg, fontFamily: "'Lexend', sans-serif" }}>{textoSilaba}</span>
                 </span>
               );
             })}
             {ultimoAcorde && (
               <span style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
-                <span style={{ fontSize: '0.85em', fontWeight: '700', color: C.chord, lineHeight: '1.2', fontFamily: 'monospace' }}>
+                <span style={{ fontSize: '0.88em', fontWeight: '800', color: tema.chord, lineHeight: '1.2', fontFamily: "'Lexend', sans-serif" }}>
                   {transposeChord(ultimoAcorde, semitonos)}
                 </span>
-                <span style={{ lineHeight: '1.25' }}>&nbsp;</span>
+                <span style={{ lineHeight: '1.25', fontFamily: "'Lexend', sans-serif" }}>&nbsp;</span>
               </span>
             )}
           </span>
@@ -333,9 +313,6 @@ function RenderLineaChordPro({ linea, semitonos }) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Componente Principal de la Aplicación                                     */
-/* -------------------------------------------------------------------------- */
 const FONT_SIZES = [14, 16, 18, 21, 24];
 const SPEEDS = [0.5, 1, 1.5, 2];
 
@@ -345,6 +322,7 @@ export default function App() {
 
   const [vistaActual, setVistaActual] = useState('menu');
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
+  const [modoOscuro, setModoOscuro] = useState(true);
   const [semitonos, setSemitonos] = useState(0);
   const [fontIdx, setFontIdx] = useState(1);
   const [scrolling, setScrolling] = useState(false);
@@ -363,9 +341,29 @@ export default function App() {
 
   const scrollRef = useRef(null);
 
-  // Himnario persistente
+  // Paleta dinámica Claro / Oscuro
+  const T = modoOscuro ? {
+    bg: '#0b1120',
+    card: '#121a2d',
+    soft: '#1a2438',
+    fg: '#eef0f5',
+    muted: '#94a3b8',
+    primary: '#e07a4f',
+    chord: '#f08a5d',
+    border: 'rgba(238, 240, 245, 0.08)',
+  } : {
+    bg: '#f8fafc',
+    card: '#ffffff',
+    soft: '#e2e8f0',
+    fg: '#0f172a',
+    muted: '#64748b',
+    primary: '#ea580c',
+    chord: '#ea580c',
+    border: '#e2e8f0',
+  };
+
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_nasa_v11');
+    const local = localStorage.getItem('cifra_nasa_v12');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -479,7 +477,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_nasa_v11', JSON.stringify(himnos));
+    localStorage.setItem('cifra_nasa_v12', JSON.stringify(himnos));
   }, [himnos]);
 
   // Auto-scroll loop
@@ -596,9 +594,9 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const tonoActual = transposeChord(himnoActivo.tonoBase, semitonos);
 
   return (
-    <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: C.bg, color: C.fg }}>
+    <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: T.bg, color: T.fg, transition: 'background-color 0.2s ease, color 0.2s ease' }}>
       
-      {/* Estilos e Impresión PDF en dos columnas */}
+      {/* REGLA DEFINITIVA PARA PDF NÍTIDO Y GRANDE A 2 COLUMNAS */}
       <style>{`
         @keyframes zoomPunto {
           0% { transform: scale(0.4); opacity: 0; }
@@ -606,33 +604,93 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         }
         .cn-scroll { scrollbar-width: none; }
         .cn-scroll::-webkit-scrollbar { display: none; }
+
         @media print {
-          body, html { background: #ffffff !important; color: #000000 !important; }
-          .no-imprimir { display: none !important; }
-          .contenedor-visor { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+          @page {
+            size: A4 portrait;
+            margin: 14mm 16mm;
+          }
+          body, html {
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-family: 'Lexend', sans-serif !important;
+            -webkit-print-color-adjust: exact;
+          }
+          .no-imprimir {
+            display: none !important;
+          }
+          .contenedor-visor {
+            max-width: 100% !important;
+            height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .header-himno-pdf {
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 12px !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+          }
+          .header-himno-pdf h1 {
+            font-size: 24pt !important;
+            font-weight: 800 !important;
+            color: #000000 !important;
+            margin: 0 0 6px 0 !important;
+          }
+          .header-himno-pdf p {
+            font-size: 11pt !important;
+            color: #475569 !important;
+            margin: 0 0 10px 0 !important;
+          }
+          .header-himno-pdf .meta {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 20px !important;
+            font-size: 10pt !important;
+            font-weight: 700 !important;
+            color: #334155 !important;
+          }
           .layout-partitura-pdf {
             display: flex !important;
-            flex-direction: row-reverse !important;
+            flex-direction: row !important;
             justify-content: space-between !important;
             align-items: flex-start !important;
-            gap: 20px !important;
-          }
-          .carrusel-acordes {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 80px !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            gap: 12px !important;
-            padding: 0 !important;
+            gap: 24px !important;
           }
           .area-partitura {
             flex: 1 !important;
-            background: transparent !important;
-            border: none !important;
+            padding: 0 !important;
+            font-size: 13pt !important;
+            line-height: 1.5 !important;
+          }
+          .area-partitura * {
+            color: #000000 !important;
+          }
+          .carrusel-acordes {
+            width: 86px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+            margin: 0 !important;
             padding: 0 !important;
           }
-          .area-partitura * { color: #000000 !important; }
+          .carrusel-acordes figure {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: none !important;
+            width: 82px !important;
+            padding: 6px !important;
+          }
+          .carrusel-acordes figcaption {
+            color: #000000 !important;
+            font-size: 10pt !important;
+          }
+          .carrusel-acordes svg text,
+          .carrusel-acordes svg line,
+          .carrusel-acordes svg rect {
+            stroke: #000000 !important;
+            fill: #000000 !important;
+          }
         }
       `}</style>
 
@@ -674,35 +732,78 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         </div>
       )}
 
-      {/* MENÚ PRINCIPAL */}
+      {/* MENÚ PRINCIPAL MEJORADO */}
       {vistaActual === 'menu' && (
-        <main style={{ maxWidth: '440px', margin: '36px auto', padding: '0 16px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <span style={{ backgroundColor: C.primary, color: '#fff', padding: '4px 12px', borderRadius: '8px', fontWeight: '800', fontSize: '15px' }}>Cifra</span>
-            <span style={{ fontSize: '18px', fontWeight: '700', marginLeft: '8px', color: C.fg }}>NASA</span>
+        <main style={{ maxWidth: '440px', margin: '0 auto', padding: '36px 20px' }}>
+          {/* Cabecera del Menú con Selector de Tema */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ backgroundColor: T.primary, color: '#fff', padding: '4px 12px', borderRadius: '8px', fontWeight: '800', fontSize: '15px' }}>Cifra</span>
+              <span style={{ fontSize: '20px', fontWeight: '800', color: T.fg, letterSpacing: '1px' }}>NASA</span>
+            </div>
+            
+            <button
+              onClick={() => setModoOscuro(!modoOscuro)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: T.soft,
+                border: `1px solid ${T.border}`,
+                color: T.fg,
+                padding: '6px 12px',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                fontFamily: "'Lexend', sans-serif",
+                fontSize: '12px',
+                fontWeight: '600'
+              }}
+            >
+              <span>{modoOscuro ? '🌙 Oscuro' : '☀️ Claro'}</span>
+            </button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div
               onClick={() => setVistaActual('categorias')}
-              style={{ backgroundColor: C.card, boxShadow: `inset 0 0 0 1px ${C.border}`, padding: '18px 20px', borderRadius: '14px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              style={{
+                backgroundColor: T.card,
+                border: `1px solid ${T.border}`,
+                padding: '20px',
+                borderRadius: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                transition: 'transform 0.15s ease'
+              }}
             >
               <div>
-                <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700', color: C.primary }}>📖 Himnos</h3>
-                <p style={{ margin: 0, fontSize: '12px', color: C.muted }}>Suplementarios, Complementarios, Himnos y Nuevos</p>
+                <h3 style={{ margin: '0 0 4px 0', fontSize: '17px', fontWeight: '700', color: T.primary }}>📖 Himnos</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: T.muted }}>Suplementarios, Complementarios, Himnos y Nuevos</p>
               </div>
-              <span style={{ fontSize: '18px', color: C.primary, fontWeight: 'bold' }}>→</span>
+              <span style={{ fontSize: '20px', color: T.primary, fontWeight: 'bold' }}>→</span>
             </div>
 
             <div
               onClick={abrirNuevo}
-              style={{ backgroundColor: C.card, boxShadow: `inset 0 0 0 1px ${C.border}`, padding: '18px 20px', borderRadius: '14px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              style={{
+                backgroundColor: T.card,
+                border: `1px solid ${T.border}`,
+                padding: '20px',
+                borderRadius: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                transition: 'transform 0.15s ease'
+              }}
             >
               <div>
-                <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700', color: '#38bdf8' }}>➕ Agregar Himnos</h3>
-                <p style={{ margin: 0, fontSize: '12px', color: C.muted }}>Formato ChordPro profesional [Acorde]</p>
+                <h3 style={{ margin: '0 0 4px 0', fontSize: '17px', fontWeight: '700', color: '#0284c7' }}>➕ Agregar Himnos</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: T.muted }}>Formato ChordPro [Acorde]Letra</p>
               </div>
-              <span style={{ fontSize: '18px', color: '#38bdf8', fontWeight: 'bold' }}>→</span>
+              <span style={{ fontSize: '20px', color: '#0284c7', fontWeight: 'bold' }}>→</span>
             </div>
           </div>
         </main>
@@ -713,17 +814,17 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>Categorías</h2>
-            <button onClick={navegarAtras} style={{ background: C.soft, border: 'none', color: C.fg, padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: T.soft, border: 'none', color: T.fg, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {["Suplementarios", "Complementarios", "Himnos", "Nuevos"].map(cat => (
               <button
                 key={cat}
                 onClick={() => { setCategoriaSel(cat); setVistaActual('lista'); }}
-                style={{ backgroundColor: C.card, boxShadow: `inset 0 0 0 1px ${C.border}`, color: C.fg, padding: '16px', borderRadius: '12px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '15px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: 'none' }}
+                style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, color: T.fg, padding: '16px', borderRadius: '12px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '15px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
                 <span>{cat}</span>
-                <span style={{ color: C.primary, fontWeight: 'bold' }}>→</span>
+                <span style={{ color: T.primary, fontWeight: 'bold' }}>→</span>
               </button>
             ))}
           </div>
@@ -735,7 +836,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
-            <button onClick={navegarAtras} style={{ background: C.soft, border: 'none', color: C.fg, padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: T.soft, border: 'none', color: T.fg, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {himnos.filter(h => h.categoria === categoriaSel).map(h => {
@@ -744,9 +845,9 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                 <div
                   key={h.id}
                   onClick={() => { setHimnoActivo(h); setSemitonos(0); setVistaActual('visor'); }}
-                  style={{ backgroundColor: C.card, boxShadow: `inset 0 0 0 1px ${C.border}`, padding: '14px 16px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
+                  style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, padding: '14px 16px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                 >
-                  {prefijo && <span style={{ fontWeight: '800', color: C.chord, fontSize: '15px' }}>{prefijo}</span>}
+                  {prefijo && <span style={{ fontWeight: '800', color: T.chord, fontSize: '15px' }}>{prefijo}</span>}
                   <div style={{ fontWeight: '600', fontSize: '15px' }}>{h.titulo}</div>
                 </div>
               );
@@ -755,34 +856,43 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         </main>
       )}
 
-      {/* VISOR DE PARTITURA ESTILO V0 */}
+      {/* VISOR DE PARTITURA */}
       {vistaActual === 'visor' && (
-        <div className="contenedor-visor" style={{ height: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '480px', margin: '0 auto', position: 'relative' }}>
+        <div className="contenedor-visor" style={{ height: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '520px', margin: '0 auto', position: 'relative' }}>
           
-          {/* Barra Superior V0 */}
-          <header className="no-imprimir" style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', backdropFilter: 'blur(12px)', background: 'rgba(11, 17, 32, 0.9)', borderBottom: `1px solid ${C.border}` }}>
-            <button onClick={navegarAtras} style={{ background: 'transparent', border: 'none', color: C.fg, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }}>
+          {/* Barra Superior con botón Volver, Tono, Letra, Tema, Editar y PDF */}
+          <header className="no-imprimir" style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', backdropFilter: 'blur(12px)', background: modoOscuro ? 'rgba(11, 17, 32, 0.92)' : 'rgba(248, 250, 252, 0.92)', borderBottom: `1px solid ${T.border}` }}>
+            <button onClick={navegarAtras} style={{ background: 'transparent', border: 'none', color: T.fg, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               {/* Selector de Transposición */}
-              <div style={{ display: 'flex', alignItems: 'center', background: C.soft, borderRadius: '999px', padding: '2px 4px' }}>
-                <button onClick={() => setSemitonos(s => Math.max(-11, s - 1))} style={{ width: '28px', height: '28px', borderRadius: '50%', border: 'none', background: 'transparent', color: C.fg, cursor: 'pointer', fontWeight: 'bold' }}>-</button>
-                <span style={{ width: '36px', textAlign: 'center', fontFamily: 'monospace', fontSize: '12px', fontWeight: '700', color: C.chord }}>{labelSemitonos}</span>
-                <button onClick={() => setSemitonos(s => Math.min(11, s + 1))} style={{ width: '28px', height: '28px', borderRadius: '50%', border: 'none', background: 'transparent', color: C.fg, cursor: 'pointer', fontWeight: 'bold' }}>+</button>
+              <div style={{ display: 'flex', alignItems: 'center', background: T.soft, borderRadius: '999px', padding: '2px 4px' }}>
+                <button onClick={() => setSemitonos(s => Math.max(-11, s - 1))} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: T.fg, cursor: 'pointer', fontWeight: 'bold' }}>-</button>
+                <span style={{ width: '32px', textAlign: 'center', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '800', color: T.chord }}>{labelSemitonos}</span>
+                <button onClick={() => setSemitonos(s => Math.min(11, s + 1))} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: T.fg, cursor: 'pointer', fontWeight: 'bold' }}>+</button>
               </div>
 
               {/* Selector de Tamaño de Letra */}
-              <div style={{ display: 'flex', alignItems: 'center', background: C.soft, borderRadius: '999px', padding: '2px 4px' }}>
-                <button onClick={() => setFontIdx(i => Math.max(0, i - 1))} disabled={fontIdx === 0} style={{ width: '28px', height: '28px', borderRadius: '50%', border: 'none', background: 'transparent', color: C.fg, cursor: 'pointer', fontSize: '11px', fontWeight: '700', opacity: fontIdx === 0 ? 0.3 : 1 }}>A-</button>
-                <button onClick={() => setFontIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))} disabled={fontIdx === FONT_SIZES.length - 1} style={{ width: '28px', height: '28px', borderRadius: '50%', border: 'none', background: 'transparent', color: C.fg, cursor: 'pointer', fontSize: '13px', fontWeight: '700', opacity: fontIdx === FONT_SIZES.length - 1 ? 0.3 : 1 }}>A+</button>
+              <div style={{ display: 'flex', alignItems: 'center', background: T.soft, borderRadius: '999px', padding: '2px 4px' }}>
+                <button onClick={() => setFontIdx(i => Math.max(0, i - 1))} disabled={fontIdx === 0} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: T.fg, cursor: 'pointer', fontSize: '11px', fontWeight: '800', opacity: fontIdx === 0 ? 0.3 : 1 }}>A-</button>
+                <button onClick={() => setFontIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))} disabled={fontIdx === FONT_SIZES.length - 1} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: T.fg, cursor: 'pointer', fontSize: '13px', fontWeight: '800', opacity: fontIdx === FONT_SIZES.length - 1 ? 0.3 : 1 }}>A+</button>
               </div>
+
+              {/* Toggle Tema Claro / Oscuro */}
+              <button
+                onClick={() => setModoOscuro(!modoOscuro)}
+                style={{ background: T.soft, border: 'none', color: T.fg, width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}
+                title="Cambiar tema"
+              >
+                {modoOscuro ? '🌙' : '☀️'}
+              </button>
             </div>
 
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <button onClick={() => abrirEditor(himnoActivo)} style={{ background: 'transparent', border: 'none', color: C.muted, cursor: 'pointer', fontSize: '15px' }} title="Editar">✏️</button>
-              <button onClick={descargarPDF} style={{ background: 'transparent', border: 'none', color: C.fg, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }} title="Exportar PDF">
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <button onClick={() => abrirEditor(himnoActivo)} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer', fontSize: '15px', padding: '4px' }} title="Editar">✏️</button>
+              <button onClick={descargarPDF} style={{ background: 'transparent', border: 'none', color: T.fg, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }} title="Exportar PDF">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M12 18v-6M9 15l3 3 3-3"/></svg>
               </button>
             </div>
@@ -790,51 +900,53 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
           {/* Área de Lectura Scrollable */}
           <div ref={scrollRef} className="cn-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px' }}>
+            
+            {/* Header del Himno para Pantalla y PDF */}
+            <section className="header-himno-pdf" style={{ margin: '12px 16px 0', background: T.card, border: `1px solid ${T.border}`, borderRadius: '16px', padding: '16px 18px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: T.fg }}>
+                  {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
+                </h1>
+                <span style={{ background: 'rgba(224,122,79,0.18)', color: T.chord, padding: '3px 10px', borderRadius: '6px', fontFamily: "'Lexend', sans-serif", fontSize: '13px', fontWeight: '800' }}>
+                  {tonoActual}
+                </span>
+              </div>
+              {himnoActivo.autor && (
+                <p style={{ margin: '4px 0 0', fontSize: '13px', color: T.muted }}>{himnoActivo.autor}</p>
+              )}
+              <div className="meta" style={{ marginTop: '10px', display: 'flex', gap: '10px', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '600' }}>
+                <span style={{ border: `1px solid ${T.border}`, padding: '2px 8px', borderRadius: '6px', color: T.fg }}>[{himnoActivo.compas || '4/4'}]</span>
+                <span style={{ border: `1px solid ${T.border}`, padding: '2px 8px', borderRadius: '6px', color: T.fg }}>[{himnoActivo.bpm ? `${himnoActivo.bpm} bpm` : '120 bpm'}]</span>
+              </div>
+            </section>
+
+            {/* Layout Dual: Pantalla (Carrusel arriba + Letra) / PDF (Letra a la izquierda + Acordes a la derecha) */}
             <div className="layout-partitura-pdf">
               
               {/* Carrusel de Acordes */}
-              <section className="carrusel-acordes" aria-label="Acordes del cántico" style={{ paddingTop: '8px' }}>
+              <section className="carrusel-acordes" aria-label="Acordes del cántico" style={{ paddingTop: '10px' }}>
                 <ul className="cn-scroll" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '0 16px 6px', margin: 0, listStyle: 'none' }}>
                   {acordesDelHimno(himnoActivo.textoChordPro).map((chord, idx) => (
                     <li key={idx} style={{ flexShrink: 0 }}>
-                      <DiagramaAcordeV0 name={transposeChord(chord, semitonos)} />
+                      <DiagramaAcordeLexend name={transposeChord(chord, semitonos)} tema={T} />
                     </li>
                   ))}
                 </ul>
               </section>
 
-              {/* Tarjeta del Himno */}
-              <section style={{ margin: '12px 16px 0', background: C.card, boxShadow: `inset 0 0 0 1px ${C.border}`, borderRadius: '16px', padding: '16px 18px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-                  <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '700', color: C.fg }}>
-                    {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
-                  </h1>
-                  <span style={{ background: 'rgba(224,122,79,0.15)', color: C.chord, padding: '2px 8px', borderRadius: '6px', fontFamily: 'monospace', fontSize: '13px', fontWeight: '700' }}>
-                    {tonoActual}
-                  </span>
-                </div>
-                {himnoActivo.autor && (
-                  <p style={{ margin: '4px 0 0', fontSize: '13px', color: C.muted }}>{himnoActivo.autor}</p>
-                )}
-                <div style={{ marginTop: '10px', display: 'flex', gap: '12px', fontFamily: 'monospace', fontSize: '12px' }}>
-                  <span style={{ border: `1px solid ${C.border}`, padding: '2px 6px', borderRadius: '4px', color: 'rgba(238,240,245,0.8)' }}>[{himnoActivo.compas || '4/4'}]</span>
-                  <span style={{ border: `1px solid ${C.border}`, padding: '2px 6px', borderRadius: '4px', color: 'rgba(238,240,245,0.8)' }}>[{himnoActivo.bpm ? `${himnoActivo.bpm} bpm` : '120 bpm'}]</span>
-                </div>
-              </section>
-
-              {/* Letra con Acordes */}
-              <article className="area-partitura" style={{ padding: '20px 18px 0', fontSize: `${FONT_SIZES[fontIdx]}px` }}>
+              {/* Letra del Himno en Tamaño Personalizado */}
+              <article className="area-partitura" style={{ padding: '16px 18px 0', fontSize: `${FONT_SIZES[fontIdx]}px` }}>
                 {himnoActivo.textoChordPro.split('\n').map((linea, idx) => (
-                  <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} />
+                  <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} tema={T} />
                 ))}
               </article>
 
             </div>
           </div>
 
-          {/* Barra Flotante de Auto-Scroll Manos Libres V0 */}
+          {/* Barra Flotante de Auto-Scroll Manos Libres */}
           <div className="no-imprimir" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'center', padding: '0 16px 16px', zIndex: 30 }}>
-            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(18,26,45,0.92)', backdropFilter: 'blur(12px)', boxShadow: `0 8px 30px rgba(0,0,0,0.5), inset 0 0 0 1px ${C.border}`, borderRadius: '999px', padding: '6px 12px 6px 6px' }}>
+            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: modoOscuro ? 'rgba(18,26,45,0.92)' : 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', boxShadow: `0 8px 30px rgba(0,0,0,0.25), inset 0 0 0 1px ${T.border}`, borderRadius: '999px', padding: '6px 12px 6px 6px' }}>
               <button
                 type="button"
                 onClick={() => setScrolling(s => !s)}
@@ -845,11 +957,12 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   borderRadius: '999px',
                   padding: '8px 16px',
                   fontSize: '13px',
-                  fontWeight: '600',
+                  fontWeight: '700',
                   border: 'none',
                   cursor: 'pointer',
-                  background: scrolling ? C.primary : C.soft,
-                  color: scrolling ? C.bg : C.fg
+                  background: scrolling ? T.primary : T.soft,
+                  color: scrolling ? '#fff' : T.fg,
+                  fontFamily: "'Lexend', sans-serif"
                 }}
               >
                 <span>{scrolling ? '⏸ Pausar' : '▶ Auto-scroll'}</span>
@@ -867,10 +980,11 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       borderRadius: '999px',
                       border: 'none',
                       cursor: 'pointer',
-                      fontFamily: 'monospace',
+                      fontFamily: "'Lexend', sans-serif",
                       fontSize: '11px',
+                      fontWeight: '700',
                       background: speed === s ? 'rgba(224,122,79,0.2)' : 'transparent',
-                      color: speed === s ? C.chord : C.muted
+                      color: speed === s ? T.chord : T.muted
                     }}
                   >
                     {s}×
@@ -890,16 +1004,16 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>
               {idEditando ? '✏️ Editar Himno' : '➕ Agregar Nuevo Himno'}
             </h2>
-            <button onClick={navegarAtras} style={{ background: C.soft, border: 'none', color: C.fg, padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: T.soft, border: 'none', color: T.fg, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
           </div>
 
           <form onSubmit={guardarFormulario} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Categoría:</label>
+              <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Categoría:</label>
               <select
                 value={formCat}
                 onChange={e => setFormCat(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, fontFamily: "'Lexend', sans-serif" }}
+                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif" }}
               >
                 <option value="Suplementarios">Suplementarios (S-)</option>
                 <option value="Complementarios">Complementarios (C-)</option>
@@ -910,56 +1024,56 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
             {formCat !== 'Nuevos' && (
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Número (solo dígitos):</label>
+                <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Número (solo dígitos):</label>
                 <input
                   type="text"
                   placeholder="Ej: 53"
                   value={formNum}
                   onChange={e => setFormNum(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
                 />
               </div>
             )}
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Título del cántico:</label>
+              <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Título del cántico:</label>
               <input
                 type="text"
                 placeholder="Nombre del cántico..."
                 value={formTitulo}
                 onChange={e => setFormTitulo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
               />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Compás:</label>
+                <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Compás:</label>
                 <input
                   type="text"
                   placeholder="4/4"
                   value={formCompas}
                   onChange={e => setFormCompas(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>BPM:</label>
+                <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>BPM:</label>
                 <input
                   type="text"
                   placeholder="132"
                   value={formBpm}
                   onChange={e => setFormBpm(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Tono:</label>
+                <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Tono:</label>
                 <select
                   value={formTono}
                   onChange={e => setFormTono(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
                 >
                   {NOTES.map(n => <option key={n} value={n}>{n}</option>)}
                   {["Dm", "Em", "Am", "Bm", "F#m", "Gm"].map(n => <option key={n} value={n}>{n}</option>)}
@@ -968,31 +1082,31 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Autor(es) / Referencia:</label>
+              <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Autor(es) / Referencia:</label>
               <input
                 type="text"
                 placeholder="Ej: Hebert Faria / Samuel Huh"
                 value={formAutor}
                 onChange={e => setFormAutor(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: C.muted }}>Letra en formato ChordPro ([Acorde]Letra):</label>
+              <label style={{ fontSize: '12px', fontWeight: '700', color: T.muted }}>Letra en formato ChordPro ([Acorde]Letra):</label>
               <textarea
                 rows="10"
                 placeholder="[Dm]Hay una nube que con[Bb]duce la iglesia..."
                 value={formCuerpo}
                 onChange={e => setFormCuerpo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${C.border}`, backgroundColor: C.card, color: C.fg, fontFamily: "'Lexend', sans-serif", fontSize: '13px', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${T.border}`, backgroundColor: T.card, color: T.fg, fontFamily: "'Lexend', sans-serif", fontSize: '13px', boxSizing: 'border-box' }}
               />
             </div>
 
             <button
               type="submit"
-              style={{ backgroundColor: C.primary, color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '14px', marginTop: '6px' }}
+              style={{ backgroundColor: T.primary, color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '800', cursor: 'pointer', fontSize: '14px', marginTop: '6px', fontFamily: "'Lexend', sans-serif" }}
             >
               {idEditando ? 'Guardar Cambios' : 'Guardar Himno'}
             </button>
