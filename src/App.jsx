@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+// Tipografía Lexend
 const linkLexend = document.createElement('link');
 linkLexend.rel = 'stylesheet';
 linkLexend.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap';
@@ -7,6 +8,7 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
   document.head.appendChild(linkLexend);
 }
 
+// Iconos vectoriales de la intro
 const IconoGuitarra = () => (
   <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m19 5-3-3" />
@@ -31,8 +33,15 @@ const IconoBateria = () => (
   </svg>
 );
 
+// Motor de notas y transposición
 const NOTAS_SOST = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const NOTAS_BEMOL = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+
+const INDICES_NOTAS = {
+  "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3,
+  "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
+  "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11
+};
 
 function transponerNota(nota, semitonos) {
   let idx = NOTAS_SOST.indexOf(nota);
@@ -48,39 +57,103 @@ function transponerAcorde(acorde, semitonos) {
   return acorde.replace(/[A-G][b#]?/g, (m) => transponerNota(m, semitonos));
 }
 
-const DICCIONARIO_FIJO = {
-  "C": { trastes: [-1, 3, 2, 0, 1, 0], dedos: ["", "3", "2", "", "1", ""], base: 1 },
-  "C#": { trastes: [-1, 4, 3, 1, 2, 1], dedos: ["", "4", "3", "1", "2", "1"], base: 1, cejilla: 1 },
-  "Db": { trastes: [-1, 4, 3, 1, 2, 1], dedos: ["", "4", "3", "1", "2", "1"], base: 1, cejilla: 1 },
-  "D": { trastes: [-1, -1, 0, 2, 3, 2], dedos: ["", "", "", "1", "3", "2"], base: 1 },
-  "D9": { trastes: [-1, -1, 0, 2, 3, 0], dedos: ["", "", "", "1", "2", ""], base: 1 },
-  "D#": { trastes: [-1, -1, 1, 3, 4, 3], dedos: ["", "", "1", "2", "4", "3"], base: 1 },
-  "Eb": { trastes: [-1, -1, 1, 3, 4, 3], dedos: ["", "", "1", "2", "4", "3"], base: 1 },
-  "Dm": { trastes: [-1, -1, 0, 2, 3, 1], dedos: ["", "", "", "2", "3", "1"], base: 1 },
-  "E": { trastes: [0, 2, 2, 1, 0, 0], dedos: ["", "2", "3", "1", "", ""], base: 1 },
-  "E4": { trastes: [0, 2, 2, 2, 0, 0], dedos: ["", "2", "3", "4", "", ""], base: 1 },
-  "Em": { trastes: [0, 2, 2, 0, 0, 0], dedos: ["", "2", "3", "", "", ""], base: 1 },
-  "F": { trastes: [1, 3, 3, 2, 1, 1], dedos: ["1", "3", "4", "2", "1", "1"], base: 1, cejilla: 1 },
-  "F#": { trastes: [2, 4, 4, 3, 2, 2], dedos: ["1", "3", "4", "2", "1", "1"], base: 2, cejilla: 2 },
-  "F#m": { trastes: [2, 4, 4, 2, 2, 2], dedos: ["1", "3", "4", "1", "1", "1"], base: 2, cejilla: 2 },
-  "G": { trastes: [3, 2, 0, 0, 0, 3], dedos: ["2", "1", "", "", "", "3"], base: 1 },
-  "Gm": { trastes: [3, 5, 5, 3, 3, 3], dedos: ["1", "3", "4", "1", "1", "1"], base: 3, cejilla: 3 },
-  "A": { trastes: [-1, 0, 2, 2, 2, 0], dedos: ["", "", "1", "2", "3", ""], base: 1 },
-  "A9": { trastes: [-1, 0, 2, 2, 0, 0], dedos: ["", "", "1", "2", "", ""], base: 1 },
-  "Am": { trastes: [-1, 0, 2, 2, 1, 0], dedos: ["", "", "2", "3", "1", ""], base: 1 },
-  "Am7": { trastes: [-1, 0, 2, 0, 1, 0], dedos: ["", "", "2", "", "1", ""], base: 1 },
-  "A7": { trastes: [-1, 0, 2, 0, 2, 0], dedos: ["", "", "2", "", "3", ""], base: 1 },
-  "Bb": { trastes: [-1, 1, 3, 3, 3, 1], dedos: ["", "1", "2", "3", "4", "1"], base: 1, cejilla: 1 },
-  "B": { trastes: [-1, 2, 4, 4, 4, 2], dedos: ["", "1", "2", "3", "4", "1"], base: 2, cejilla: 2 },
-  "Bm": { trastes: [-1, 2, 4, 4, 3, 2], dedos: ["", "1", "3", "4", "2", "1"], base: 2, cejilla: 2 },
-  "Bm7": { trastes: [-1, 2, 0, 2, 0, 2], dedos: ["", "1", "", "2", "", "3"], base: 1 },
-  "Em7(5b)": { trastes: [-1, -1, 2, 3, 3, 3], dedos: ["", "", "1", "2", "3", "4"], base: 1 },
-  "D#m7(b5)": { trastes: [-1, -1, 1, 2, 2, 2], dedos: ["", "", "1", "2", "3", "4"], base: 1 }
-};
+// MOTOR DINÁMICO DE ACORDES (SISTEMA CAGED Y CEJILLAS MÓVILES)
+function calcularDiagramaAcorde(nombreAcorde) {
+  if (!nombreAcorde) return null;
+  const limpio = nombreAcorde.split('/')[0].trim();
+  const match = limpio.match(/^([A-G][b#]?)(.*)$/);
+  if (!match) return null;
+
+  const [, raiz, tipo] = match;
+  const semitonoRaiz = INDICES_NOTAS[raiz];
+  if (semitonoRaiz === undefined) return null;
+
+  // 1. Acordes abiertos base
+  const basicos = {
+    "C": { trastes: [-1, 3, 2, 0, 1, 0], dedos: ["", "3", "2", "", "1", ""], base: 1 },
+    "C7": { trastes: [-1, 3, 2, 3, 1, -1], dedos: ["", "3", "2", "4", "1", ""], base: 1 },
+    "D": { trastes: [-1, -1, 0, 2, 3, 2], dedos: ["", "", "", "1", "3", "2"], base: 1 },
+    "D9": { trastes: [-1, -1, 0, 2, 3, 0], dedos: ["", "", "", "1", "2", ""], base: 1 },
+    "Dm": { trastes: [-1, -1, 0, 2, 3, 1], dedos: ["", "", "", "2", "3", "1"], base: 1 },
+    "E": { trastes: [0, 2, 2, 1, 0, 0], dedos: ["", "2", "3", "1", "", ""], base: 1 },
+    "E4": { trastes: [0, 2, 2, 2, 0, 0], dedos: ["", "2", "3", "4", "", ""], base: 1 },
+    "Em": { trastes: [0, 2, 2, 0, 0, 0], dedos: ["", "2", "3", "", "", ""], base: 1 },
+    "G": { trastes: [3, 2, 0, 0, 0, 3], dedos: ["2", "1", "", "", "", "3"], base: 1 },
+    "A": { trastes: [-1, 0, 2, 2, 2, 0], dedos: ["", "", "1", "2", "3", ""], base: 1 },
+    "A9": { trastes: [-1, 0, 2, 2, 0, 0], dedos: ["", "", "1", "2", "", ""], base: 1 },
+    "Am": { trastes: [-1, 0, 2, 2, 1, 0], dedos: ["", "", "2", "3", "1", ""], base: 1 },
+    "Am7": { trastes: [-1, 0, 2, 0, 1, 0], dedos: ["", "", "2", "", "1", ""], base: 1 },
+    "A7": { trastes: [-1, 0, 2, 0, 2, 0], dedos: ["", "", "2", "", "3", ""], base: 1 },
+    "Bm7": { trastes: [-1, 2, 0, 2, 0, 2], dedos: ["", "1", "", "2", "", "3"], base: 1 },
+    "D#m7(b5)": { trastes: [-1, -1, 1, 2, 2, 2], dedos: ["", "", "1", "2", "3", "4"], base: 1 },
+    "Bm7(b5)": { trastes: [-1, 2, 3, 2, 3, -1], dedos: ["", "1", "3", "2", "4", ""], base: 1 },
+    "Em7(5b)": { trastes: [-1, -1, 2, 3, 3, 3], dedos: ["", "", "1", "2", "3", "4"], base: 1 }
+  };
+
+  if (basicos[limpio]) return basicos[limpio];
+
+  // 2. Acordes Menores (m) móviles
+  if (tipo === "m") {
+    let traste6 = (semitonoRaiz - 4 + 12) % 12; // Forma Em (cuerda 6)
+    if (traste6 >= 1 && traste6 <= 8) {
+      return {
+        base: traste6,
+        cejilla: traste6,
+        trastes: [traste6, traste6 + 2, traste6 + 2, traste6, traste6, traste6],
+        dedos: ["1", "3", "4", "1", "1", "1"]
+      };
+    }
+    let traste5 = (semitonoRaiz - 9 + 12) % 12; // Forma Am (cuerda 5)
+    return {
+      base: traste5,
+      cejilla: traste5,
+      trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 1, traste5],
+      dedos: ["", "1", "3", "4", "2", "1"]
+    };
+  }
+
+  // 3. Acordes con Séptima Dominante (7) móviles
+  if (tipo === "7") {
+    let traste6 = (semitonoRaiz - 4 + 12) % 12;
+    if (traste6 >= 1 && traste6 <= 8) {
+      return {
+        base: traste6,
+        cejilla: traste6,
+        trastes: [traste6, traste6 + 2, traste6, traste6 + 1, traste6, traste6],
+        dedos: ["1", "3", "1", "2", "1", "1"]
+      };
+    }
+    let traste5 = (semitonoRaiz - 9 + 12) % 12;
+    return {
+      base: traste5,
+      cejilla: traste5,
+      trastes: [-1, traste5, traste5 + 2, traste5, traste5 + 2, traste5],
+      dedos: ["", "1", "3", "1", "4", "1"]
+    };
+  }
+
+  // 4. Acordes Mayores móviles (Fm, G#, C#, D#, etc.)
+  let traste6 = (semitonoRaiz - 4 + 12) % 12;
+  if (traste6 >= 1 && traste6 <= 8) {
+    return {
+      base: traste6,
+      cejilla: traste6,
+      trastes: [traste6, traste6 + 2, traste6 + 2, traste6 + 1, traste6, traste6],
+      dedos: ["1", "3", "4", "2", "1", "1"]
+    };
+  }
+
+  let traste5 = (semitonoRaiz - 9 + 12) % 12;
+  return {
+    base: traste5,
+    cejilla: traste5,
+    trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 2, traste5],
+    dedos: ["", "1", "2", "3", "4", "1"]
+  };
+}
 
 function GraficoAcorde({ nombre, modoNoche }) {
-  const nombreLimpio = nombre.split('/')[0];
-  const datos = DICCIONARIO_FIJO[nombreLimpio] || {
+  const datos = calcularDiagramaAcorde(nombre) || {
     trastes: [-1, -1, 0, 2, 3, 2],
     dedos: ["", "", "", "1", "3", "2"],
     base: 1
@@ -91,9 +164,9 @@ function GraficoAcorde({ nombre, modoNoche }) {
   const trasteInicio = datos.base || 1;
 
   return (
-    <div style={{ textAlign: 'center', width: '62px', flexShrink: 0 }}>
+    <div style={{ textAlign: 'center', width: '60px', flexShrink: 0 }}>
       <div style={{ fontSize: '11px', fontWeight: '800', marginBottom: '2px', color: colorTexto }}>{nombre}</div>
-      <svg width="54" height="70" viewBox="0 0 60 78">
+      <svg width="52" height="68" viewBox="0 0 60 78">
         <line x1="8" y1="16" x2="52" y2="16" stroke={colorTexto} strokeWidth={trasteInicio === 1 ? "3" : "1"} />
         <line x1="8" y1="28" x2="52" y2="28" stroke={colorLinea} strokeWidth="1" />
         <line x1="8" y1="40" x2="52" y2="40" stroke={colorLinea} strokeWidth="1" />
@@ -105,13 +178,15 @@ function GraficoAcorde({ nombre, modoNoche }) {
         ))}
 
         {trasteInicio > 1 && (
-          <text x="2" y="26" fontSize="8" fontWeight="bold" fill={colorTexto}>{trasteInicio}</text>
+          <text x="2" y="26" fontSize="9" fontWeight="bold" fill={colorTexto}>{trasteInicio}</text>
         )}
 
         {datos.trastes.map((t, i) => {
           const x = 8 + i * 8.8;
           if (t === -1) return <text key={i} x={x} y="11" fontSize="8" textAnchor="middle" fill="#94a3b8">×</text>;
-          if (t === 0) return <text key={i} x={x} y="11" fontSize="8" textAnchor="middle" fill="#94a3b8">○</text>;
+          if (t === 0 || (!datos.cejilla && t === trasteInicio && trasteInicio === 1)) {
+            if (t === 0) return <text key={i} x={x} y="11" fontSize="8" textAnchor="middle" fill="#94a3b8">○</text>;
+          }
           return null;
         })}
 
@@ -123,6 +198,7 @@ function GraficoAcorde({ nombre, modoNoche }) {
           if (t <= 0) return null;
           const x = 8 + i * 8.8;
           const pos = trasteInicio > 1 ? (t - trasteInicio + 1) : t;
+          if (pos <= 0 || pos > 4) return null;
           const y = 16 + pos * 12 - 6;
           return (
             <g key={i}>
@@ -149,43 +225,96 @@ function formatearEtiqueta(himno) {
   return '';
 }
 
-function LineaConAcordes({ texto, semitonos }) {
-  if (!texto.trim()) return <div style={{ height: '14px' }} />;
+// RENDER CHORDPRO PRECISO (ACORDE ARRIBA DE CADA SÍLABA)
+function RenderLineaChordPro({ linea, semitonos }) {
+  const lineaTrim = linea.trim();
+  if (!lineaTrim) return <div style={{ height: '14px' }} />;
 
-  const partes = texto.split(/(\[[^\]]+\])/g);
-  const tieneAcordes = /\[[^\]]+\]/.test(texto);
-
-  if (!tieneAcordes) {
-    const esSeccion = /^(ESTROFA|CORO|PUENTE|INTRO|CODA)/i.test(texto.trim());
+  const esSeccion = /^(ESTROFA|CORO|PUENTE|INTRO|CODA)/i.test(lineaTrim);
+  if (esSeccion) {
     return (
       <div style={{
-        margin: esSeccion ? '14px 0 4px 0' : '2px 0',
-        fontWeight: esSeccion ? '800' : '400',
-        color: esSeccion ? '#9a3412' : 'inherit',
-        fontSize: esSeccion ? '12px' : '14px',
-        letterSpacing: esSeccion ? '1px' : 'normal'
+        marginTop: '16px',
+        marginBottom: '4px',
+        fontWeight: '800',
+        fontSize: '12px',
+        color: '#9a3412',
+        letterSpacing: '1px'
       }}>
-        {texto}
+        {lineaTrim}
       </div>
     );
   }
 
+  const palabras = linea.split(/(\s+)/);
+
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', margin: '4px 0 8px 0', lineHeight: '1.2' }}>
-      {partes.map((parte, i) => {
-        if (parte.startsWith('[') && parte.endsWith(']')) {
-          const acordeRaw = parte.slice(1, -1);
-          return (
-            <span key={i} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom', marginRight: '2px' }}>
-              <span style={{ fontSize: '13px', fontWeight: '800', color: '#ea580c', fontFamily: "'Lexend', sans-serif" }}>
-                {transponerAcorde(acordeRaw, semitonos)}
-              </span>
-            </span>
-          );
+    <div style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'flex-end',
+      minHeight: '38px',
+      margin: '2px 0'
+    }}>
+      {palabras.map((palabra, pIdx) => {
+        if (/^\s+$/.test(palabra)) {
+          return <span key={pIdx} style={{ whiteSpace: 'pre' }}>{palabra}</span>;
         }
+
+        const fragmentos = palabra.split(/(\[[^\]]+\])/g);
+        let ultimoAcorde = null;
+
         return (
-          <span key={i} style={{ whiteSpace: 'pre-wrap', fontSize: '14px', color: 'inherit' }}>
-            {parte}
+          <span key={pIdx} style={{ display: 'inline-flex', alignItems: 'flex-end' }}>
+            {fragmentos.map((frag, fIdx) => {
+              if (frag.startsWith('[') && frag.endsWith(']')) {
+                ultimoAcorde = frag.slice(1, -1);
+                return null;
+              }
+
+              const textoSilaba = frag;
+              const acordeActual = ultimoAcorde;
+              ultimoAcorde = null;
+
+              if (acordeActual) {
+                return (
+                  <span key={fIdx} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
+                    <span style={{
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      color: '#ea580c',
+                      lineHeight: '1.2',
+                      fontFamily: "'Lexend', sans-serif"
+                    }}>
+                      {transponerAcorde(acordeActual, semitonos)}
+                    </span>
+                    <span style={{ fontSize: '15px', lineHeight: '1.2' }}>
+                      {textoSilaba || '\u00A0'}
+                    </span>
+                  </span>
+                );
+              }
+
+              return (
+                <span key={fIdx} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
+                  <span style={{ fontSize: '12px', lineHeight: '1.2', visibility: 'hidden' }}>.</span>
+                  <span style={{ fontSize: '15px', lineHeight: '1.2' }}>{textoSilaba}</span>
+                </span>
+              );
+            })}
+            {ultimoAcorde && (
+              <span style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
+                <span style={{
+                  fontSize: '12px',
+                  fontWeight: '800',
+                  color: '#ea580c',
+                  lineHeight: '1.2'
+                }}>
+                  {transponerAcorde(ultimoAcorde, semitonos)}
+                </span>
+                <span style={{ fontSize: '15px', lineHeight: '1.2' }}>&nbsp;</span>
+              </span>
+            )}
           </span>
         );
       })}
@@ -201,7 +330,7 @@ export default function App() {
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
   const [modoNocturno, setModoNocturno] = useState(false);
 
-  // Formulario
+  // Formulario Agregar / Editar
   const [idEditando, setIdEditando] = useState(null);
   const [formCat, setFormCat] = useState('Suplementarios');
   const [formNum, setFormNum] = useState('');
@@ -213,7 +342,7 @@ export default function App() {
   const [formCuerpo, setFormCuerpo] = useState('');
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_cancionero_v5');
+    const local = localStorage.getItem('cifra_cancionero_v8');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -224,7 +353,7 @@ export default function App() {
         bpm: "110",
         autor: "Ez 47:1-12",
         tonoBase: "Dm",
-        textoCompleto: `ESTROFA 1
+        textoChordPro: `ESTROFA 1
 [Dm]Al hogar, al hogar, [Gm]al hogar de Dios,
 [C]Donde está el manantial [F]he venido yo,
 [Gm]Un fluir hay aquí [Dm]que no cesará,
@@ -251,8 +380,8 @@ CORO
         bpm: "144",
         autor: "Hebert Faria / João Luiz / Samuel Huh",
         tonoBase: "A",
-        textoCompleto: `INTRO [2x]
-|[A]   |[A]   |[D]   |[D]
+        textoChordPro: `INTRO [2x]
+[A]    [A]    [D]    [D]
 
 ESTROFA
 [A]La visión que recibí me [A/C#]conquis[D]tó   [D]
@@ -310,7 +439,7 @@ CODA [2x]
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_cancionero_v5', JSON.stringify(himnos));
+    localStorage.setItem('cifra_cancionero_v8', JSON.stringify(himnos));
   }, [himnos]);
 
   const acordesDelHimno = (texto) => {
@@ -333,7 +462,7 @@ CODA [2x]
     setFormBpm(himno.bpm || '120');
     setFormAutor(himno.autor || '');
     setFormTono(himno.tonoBase || 'C');
-    setFormCuerpo(himno.textoCompleto || '');
+    setFormCuerpo(himno.textoChordPro || '');
     setVistaActual('formulario');
   };
 
@@ -363,7 +492,7 @@ CODA [2x]
       bpm: formBpm.trim() || '120',
       autor: formAutor.trim(),
       tonoBase: formTono,
-      textoCompleto: formCuerpo
+      textoChordPro: formCuerpo
     };
 
     if (idEditando) {
@@ -391,10 +520,16 @@ CODA [2x]
   return (
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: fondoApp, color: colorTexto }}>
       
+      {/* ESTILOS DE ANIMACIÓN E IMPRESIÓN LIMPIA DE PDF */}
       <style>{`
         @keyframes zoomPunto {
           0% { transform: scale(0.4); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
+        }
+        @media print {
+          body { background: #fff !important; color: #000 !important; }
+          .no-imprimir { display: none !important; }
+          .area-partitura { border: none !important; padding: 0 !important; box-shadow: none !important; }
         }
       `}</style>
 
@@ -436,8 +571,8 @@ CODA [2x]
         </div>
       )}
 
-      {/* HEADER: UN SOLO BOTÓN VOLVER */}
-      <header style={{ backgroundColor: fondoTarjeta, borderBottom: `1px solid ${bordeColor}`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10 }}>
+      {/* HEADER: BOTÓN VOLVER UNIFICADO */}
+      <header className="no-imprimir" style={{ backgroundColor: fondoTarjeta, borderBottom: `1px solid ${bordeColor}`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setVistaActual('menu')}>
           <span style={{ backgroundColor: '#9a3412', color: '#fff', padding: '3px 8px', borderRadius: '6px', fontWeight: '800', fontSize: '14px' }}>Cifra</span>
           <span style={{ fontSize: '13px', fontWeight: '700', color: modoNocturno ? '#94a3b8' : '#64748b' }}>NASA</span>
@@ -476,7 +611,7 @@ CODA [2x]
             >
               <div>
                 <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700', color: '#2563eb' }}>➕ Agregar Himnos</h3>
-                <p style={{ margin: 0, fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Registrar nuevo cántico o partitura</p>
+                <p style={{ margin: 0, fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Formato ChordPro [Acorde]</p>
               </div>
               <span style={{ fontSize: '18px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
             </div>
@@ -517,12 +652,10 @@ CODA [2x]
         </main>
       )}
 
-      {/* LISTA */}
+      {/* LISTA DE HIMNOS */}
       {vistaActual === 'lista' && (
         <main style={{ maxWidth: '520px', margin: '20px auto', padding: '0 16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
-          </div>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '14px' }}>{categoriaSel}</h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {himnos.filter(h => h.categoria === categoriaSel).map(h => {
@@ -558,12 +691,11 @@ CODA [2x]
         </main>
       )}
 
-      {/* VISOR PROFESIONAL (METADATOS EXACTOS, TÍTULO SÓLIDO, EDITAR Y SIN DUPLICADOS) */}
+      {/* VISOR CON ACORDES MÓVILES EXACTOS Y PDF */}
       {vistaActual === 'visor' && (
         <div style={{ padding: '10px 12px 40px', maxWidth: '640px', margin: '0 auto' }}>
           
-          {/* Controles: Tonalidad y Editar (Sin botón volver duplicado) */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="no-imprimir" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '12px', fontWeight: '700' }}>TONO:</span>
               <button
@@ -590,12 +722,12 @@ CODA [2x]
                 onClick={() => window.print()}
                 style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}
               >
-                PDF
+                📥 PDF
               </button>
             </div>
           </div>
 
-          {/* Carrusel horizontal de acordes */}
+          {/* Carrusel horizontal de acordes calculados dinámicamente */}
           <div style={{
             backgroundColor: fondoTarjeta,
             border: `1px solid ${bordeColor}`,
@@ -607,7 +739,7 @@ CODA [2x]
             gap: '8px',
             justifyContent: 'flex-start'
           }}>
-            {acordesDelHimno(himnoActivo.textoCompleto).map((ac, idx) => (
+            {acordesDelHimno(himnoActivo.textoChordPro).map((ac, idx) => (
               <GraficoAcorde
                 key={idx}
                 nombre={transponerAcorde(ac, semitonos)}
@@ -617,14 +749,13 @@ CODA [2x]
           </div>
 
           {/* Hoja de partitura */}
-          <main style={{
+          <main className="area-partitura" style={{
             backgroundColor: fondoTarjeta,
             border: `1px solid ${bordeColor}`,
             padding: '24px 20px',
             borderRadius: '8px',
             textAlign: 'left'
           }}>
-            {/* Título en color sólido nítido y sin opacidad */}
             <div style={{ textAlign: 'center', marginBottom: '8px' }}>
               <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: colorTexto }}>
                 {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
@@ -636,16 +767,14 @@ CODA [2x]
               )}
             </div>
 
-            {/* Metadatos técnicos exactos */}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', color: modoNocturno ? '#cbd5e1' : '#475569', borderBottom: `1px solid ${bordeColor}`, paddingBottom: '8px', marginBottom: '14px' }}>
               <span>[{himnoActivo.compas || '4/4'}] [{himnoActivo.bpm ? `${himnoActivo.bpm}bpm` : '120bpm'}]</span>
               <span>Tonalidad: {transponerAcorde(himnoActivo.tonoBase, semitonos)}</span>
             </div>
 
-            {/* Letra y acordes alineados */}
-            <div style={{ textAlign: 'left', wordBreak: 'break-word' }}>
-              {himnoActivo.textoCompleto.split('\n').map((linea, idx) => (
-                <LineaConAcordes key={idx} texto={linea} semitonos={semitonos} />
+            <div>
+              {himnoActivo.textoChordPro.split('\n').map((linea, idx) => (
+                <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} />
               ))}
             </div>
           </main>
@@ -691,7 +820,7 @@ CODA [2x]
               <label style={{ fontSize: '11px', fontWeight: '700' }}>Título del cántico:</label>
               <input
                 type="text"
-                placeholder="Nombre del himno..."
+                placeholder="Nombre del cántico..."
                 value={formTitulo}
                 onChange={e => setFormTitulo(e.target.value)}
                 required
@@ -745,14 +874,14 @@ CODA [2x]
             </div>
 
             <div>
-              <label style={{ fontSize: '11px', fontWeight: '700' }}>Letra con acordes [C], [D], etc.:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700' }}>Letra en formato ChordPro (acordes entre corchetes [ ]):</label>
               <textarea
-                rows="9"
-                placeholder="[A]La visión que recibí me [A/C#]conquis[D]tó..."
+                rows="10"
+                placeholder="[A]La vi[A/C#]sión que reci[D]bí me conquis[D]tó..."
                 value={formCuerpo}
                 onChange={e => setFormCuerpo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', sans-serif", fontSize: '12px', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', sans-serif", fontSize: '13px', boxSizing: 'border-box' }}
               />
             </div>
 
