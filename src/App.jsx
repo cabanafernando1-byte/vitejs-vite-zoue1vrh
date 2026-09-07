@@ -9,79 +9,28 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* LOGO VECTORIAL EXACTO DE CANVA (Nasa CIFRAS / JESÚS ES EL SEÑOR)          */
+/* LOGO OFICIAL 100% IDÉNTICO DIRECTO DE CANVA                                */
 /* -------------------------------------------------------------------------- */
-const LogoCanvaExacto = () => (
-  <div style={{ width: '100%', maxWidth: '340px', display: 'flex', justifyContent: 'center' }}>
-    <svg viewBox="0 0 500 500" width="100%" height="auto" style={{ display: 'block', overflow: 'visible' }}>
-      {/* "Nasa" - Trazo caligráfico exacto de Beauty Salon Script */}
-      <g transform="translate(15, -10)">
-        {/* N */}
-        <path
-          d="M 125 210 C 140 185, 160 148, 172 138 C 182 130, 195 138, 185 158 C 172 185, 142 245, 140 252 C 158 205, 198 135, 218 132 C 228 130, 235 140, 226 160 C 205 205, 188 248, 186 254 C 196 230, 230 185, 252 186 C 265 187, 268 200, 254 222 C 238 248, 220 256, 215 256 C 210 256, 212 248, 218 238"
-          fill="none"
-          stroke="#d97746"
-          strokeWidth="14"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* a */}
-        <path
-          d="M 268 220 C 260 200, 275 186, 292 186 C 310 186, 318 202, 312 225 C 304 250, 280 256, 266 248 C 255 240, 258 222, 274 205 C 290 190, 310 188, 312 215 L 308 248 C 312 238, 322 220, 332 208"
-          fill="none"
-          stroke="#d97746"
-          strokeWidth="13"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* s */}
-        <path
-          d="M 336 215 C 342 195, 358 184, 370 188 C 378 192, 375 204, 362 214 C 345 228, 342 236, 348 248 C 354 258, 372 254, 385 238"
-          fill="none"
-          stroke="#d97746"
-          strokeWidth="13"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* a final con lazo terminal */}
-        <path
-          d="M 400 216 C 392 198, 408 184, 424 185 C 440 186, 446 200, 440 220 C 432 246, 410 254, 396 246 C 386 238, 388 222, 404 206 C 420 192, 436 190, 440 212 L 436 248 C 440 238, 452 222, 464 218 C 475 214, 480 224, 470 240"
-          fill="none"
-          stroke="#d97746"
-          strokeWidth="13"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </g>
-
-      {/* "CIFRAS" - Sifonn / Century Gothic Bold */}
-      <text
-        x="250"
-        y="325"
-        textAnchor="middle"
-        fontFamily="'Century Gothic', 'Lexend', sans-serif"
-        fontSize="76"
-        fontWeight="900"
-        fill="#d4d8e2"
-        letterSpacing="2.5px"
-      >
-        CIFRAS
-      </text>
-
-      {/* "JESÚS ES EL SEÑOR" */}
-      <text
-        x="250"
-        y="382"
-        textAnchor="middle"
-        fontFamily="'Century Gothic', 'Lexend', sans-serif"
-        fontSize="21"
-        fontWeight="800"
-        fill="#f6d860"
-        letterSpacing="4.5px"
-      >
-        JESÚS ES EL SEÑOR
-      </text>
-    </svg>
+const LogoOficialCanva = () => (
+  <div style={{
+    width: '100%',
+    maxWidth: '320px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '10px'
+  }}>
+    <img
+      src="/logo.png"
+      alt="Nasa Cifras - Jesús es el Señor"
+      style={{
+        width: '100%',
+        height: 'auto',
+        objectFit: 'contain',
+        display: 'block',
+        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.4))'
+      }}
+    />
   </div>
 );
 
@@ -206,7 +155,7 @@ function calcularDiagramaAcorde(nombreAcorde) {
   if (tipo === "7") {
     let t6 = (semitonoRaiz - 4 + 12) % 12;
     if (t6 >= 1 && t6 <= 8) {
-      return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6, t6 + 1, t6, t6] };
+      return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6, t6, t6] };
     }
     let t5 = (semitonoRaiz - 9 + 12) % 12;
     return { baseFret: t5, barre: { fret: t5, from: 1, to: 5 }, frets: [-1, t5, t5 + 2, t5, t5 + 2, t5] };
@@ -443,7 +392,7 @@ export default function App() {
   };
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_nasa_v20');
+    const local = localStorage.getItem('cifra_nasa_v22');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -541,16 +490,16 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const [recientes, setRecientes] = useState([himnos[0], himnos[1]]);
   const [favoritos, setFavoritos] = useState([himnos[0]]);
 
-  // Splash de entrada con duración de 2.6s
+  // Splash de bienvenida de 2.4s
   useEffect(() => {
     const splashTimer = setTimeout(() => {
       setOcultarSplash(true);
-    }, 2600);
+    }, 2400);
     return () => clearTimeout(splashTimer);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_nasa_v20', JSON.stringify(himnos));
+    localStorage.setItem('cifra_nasa_v22', JSON.stringify(himnos));
   }, [himnos]);
 
   // Auto-scroll loop
@@ -691,7 +640,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: t.bg, color: t.text, transition: 'background 0.3s ease, color 0.3s ease' }}>
       
       <style>{`
-        /* Animación suave para la entrada y salida del splash */
         @keyframes animLogoEntrada {
           0% { opacity: 0; transform: scale(0.92); filter: blur(4px); }
           100% { opacity: 1; transform: scale(1); filter: blur(0); }
@@ -756,10 +704,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
           justifyContent: 'center',
           zIndex: 9999,
           padding: '24px',
-          animation: 'fadeOutSplash 0.5s ease 2.1s forwards'
+          animation: 'fadeOutSplash 0.5s ease 1.9s forwards'
         }}>
-          <div style={{ animation: 'animLogoEntrada 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-            <LogoCanvaExacto />
+          <div style={{ animation: 'animLogoEntrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
+            <LogoOficialCanva />
           </div>
         </div>
       )}
