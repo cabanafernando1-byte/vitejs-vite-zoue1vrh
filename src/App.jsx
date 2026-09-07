@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Fuente Lexend
 const linkLexend = document.createElement('link');
 linkLexend.rel = 'stylesheet';
 linkLexend.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap';
@@ -8,7 +7,6 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
   document.head.appendChild(linkLexend);
 }
 
-// Iconos vectoriales
 const IconoGuitarra = () => (
   <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m19 5-3-3" />
@@ -33,7 +31,6 @@ const IconoBateria = () => (
   </svg>
 );
 
-// Motor de notas y transposición
 const NOTAS_SOST = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const NOTAS_BEMOL = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 
@@ -51,59 +48,52 @@ function transponerAcorde(acorde, semitonos) {
   return acorde.replace(/[A-G][b#]?/g, (m) => transponerNota(m, semitonos));
 }
 
-// Patrones base para generar gráficos en cualquier tonalidad
-const MOLDES_ACORDES = {
-  "": { trastes: [-1, 3, 2, 0, 1, 0], cejilla: false, offsetRaiz: 3, cuerdaRaiz: 1 }, // Forma de C
-  "m": { trastes: [-1, 0, 2, 2, 1, 0], cejilla: false, offsetRaiz: 0, cuerdaRaiz: 1 }, // Forma de Am
-  "7": { trastes: [-1, 0, 2, 0, 2, 0], cejilla: false, offsetRaiz: 0, cuerdaRaiz: 1 }, // Forma de A7
-  "m7": { trastes: [-1, 0, 2, 0, 1, 0], cejilla: false, offsetRaiz: 0, cuerdaRaiz: 1 }
-};
-
 const DICCIONARIO_FIJO = {
   "C": { trastes: [-1, 3, 2, 0, 1, 0], dedos: ["", "3", "2", "", "1", ""], base: 1 },
   "C#": { trastes: [-1, 4, 3, 1, 2, 1], dedos: ["", "4", "3", "1", "2", "1"], base: 1, cejilla: 1 },
   "Db": { trastes: [-1, 4, 3, 1, 2, 1], dedos: ["", "4", "3", "1", "2", "1"], base: 1, cejilla: 1 },
   "D": { trastes: [-1, -1, 0, 2, 3, 2], dedos: ["", "", "", "1", "3", "2"], base: 1 },
+  "D9": { trastes: [-1, -1, 0, 2, 3, 0], dedos: ["", "", "", "1", "2", ""], base: 1 },
   "D#": { trastes: [-1, -1, 1, 3, 4, 3], dedos: ["", "", "1", "2", "4", "3"], base: 1 },
   "Eb": { trastes: [-1, -1, 1, 3, 4, 3], dedos: ["", "", "1", "2", "4", "3"], base: 1 },
   "Dm": { trastes: [-1, -1, 0, 2, 3, 1], dedos: ["", "", "", "2", "3", "1"], base: 1 },
-  "D#m": { trastes: [-1, -1, 4, 3, 4, 2], dedos: ["", "", "3", "2", "4", "1"], base: 1 },
   "E": { trastes: [0, 2, 2, 1, 0, 0], dedos: ["", "2", "3", "1", "", ""], base: 1 },
+  "E4": { trastes: [0, 2, 2, 2, 0, 0], dedos: ["", "2", "3", "4", "", ""], base: 1 },
   "Em": { trastes: [0, 2, 2, 0, 0, 0], dedos: ["", "2", "3", "", "", ""], base: 1 },
   "F": { trastes: [1, 3, 3, 2, 1, 1], dedos: ["1", "3", "4", "2", "1", "1"], base: 1, cejilla: 1 },
   "F#": { trastes: [2, 4, 4, 3, 2, 2], dedos: ["1", "3", "4", "2", "1", "1"], base: 2, cejilla: 2 },
-  "Fm": { trastes: [1, 3, 3, 1, 1, 1], dedos: ["1", "3", "4", "1", "1", "1"], base: 1, cejilla: 1 },
   "F#m": { trastes: [2, 4, 4, 2, 2, 2], dedos: ["1", "3", "4", "1", "1", "1"], base: 2, cejilla: 2 },
   "G": { trastes: [3, 2, 0, 0, 0, 3], dedos: ["2", "1", "", "", "", "3"], base: 1 },
-  "G#": { trastes: [4, 6, 6, 5, 4, 4], dedos: ["1", "3", "4", "2", "1", "1"], base: 4, cejilla: 4 },
-  "Ab": { trastes: [4, 6, 6, 5, 4, 4], dedos: ["1", "3", "4", "2", "1", "1"], base: 4, cejilla: 4 },
   "Gm": { trastes: [3, 5, 5, 3, 3, 3], dedos: ["1", "3", "4", "1", "1", "1"], base: 3, cejilla: 3 },
-  "G#m": { trastes: [4, 6, 6, 4, 4, 4], dedos: ["1", "3", "4", "1", "1", "1"], base: 4, cejilla: 4 },
   "A": { trastes: [-1, 0, 2, 2, 2, 0], dedos: ["", "", "1", "2", "3", ""], base: 1 },
+  "A9": { trastes: [-1, 0, 2, 2, 0, 0], dedos: ["", "", "1", "2", "", ""], base: 1 },
   "Am": { trastes: [-1, 0, 2, 2, 1, 0], dedos: ["", "", "2", "3", "1", ""], base: 1 },
+  "Am7": { trastes: [-1, 0, 2, 0, 1, 0], dedos: ["", "", "2", "", "1", ""], base: 1 },
   "A7": { trastes: [-1, 0, 2, 0, 2, 0], dedos: ["", "", "2", "", "3", ""], base: 1 },
-  "A#": { trastes: [-1, 1, 3, 3, 3, 1], dedos: ["", "1", "2", "3", "4", "1"], base: 1, cejilla: 1 },
   "Bb": { trastes: [-1, 1, 3, 3, 3, 1], dedos: ["", "1", "2", "3", "4", "1"], base: 1, cejilla: 1 },
   "B": { trastes: [-1, 2, 4, 4, 4, 2], dedos: ["", "1", "2", "3", "4", "1"], base: 2, cejilla: 2 },
   "Bm": { trastes: [-1, 2, 4, 4, 3, 2], dedos: ["", "1", "3", "4", "2", "1"], base: 2, cejilla: 2 },
-  "Em7(5b)": { trastes: [-1, -1, 2, 3, 3, 3], dedos: ["", "", "1", "2", "3", "4"], base: 1 }
+  "Bm7": { trastes: [-1, 2, 0, 2, 0, 2], dedos: ["", "1", "", "2", "", "3"], base: 1 },
+  "Em7(5b)": { trastes: [-1, -1, 2, 3, 3, 3], dedos: ["", "", "1", "2", "3", "4"], base: 1 },
+  "D#m7(b5)": { trastes: [-1, -1, 1, 2, 2, 2], dedos: ["", "", "1", "2", "3", "4"], base: 1 }
 };
 
 function GraficoAcorde({ nombre, modoNoche }) {
-  const datos = DICCIONARIO_FIJO[nombre] || {
+  const nombreLimpio = nombre.split('/')[0];
+  const datos = DICCIONARIO_FIJO[nombreLimpio] || {
     trastes: [-1, -1, 0, 2, 3, 2],
     dedos: ["", "", "", "1", "3", "2"],
     base: 1
   };
 
-  const colorLinea = modoNoche ? '#94a3b8' : '#475569';
+  const colorLinea = modoNoche ? '#94a3b8' : '#64748b';
   const colorTexto = modoNoche ? '#f8fafc' : '#0f172a';
   const trasteInicio = datos.base || 1;
 
   return (
-    <div style={{ textAlign: 'center', width: '68px', margin: '4px auto' }}>
-      <div style={{ fontSize: '12px', fontWeight: '800', marginBottom: '2px', color: colorTexto }}>{nombre}</div>
-      <svg width="60" height="78" viewBox="0 0 60 78">
+    <div style={{ textAlign: 'center', width: '62px', flexShrink: 0 }}>
+      <div style={{ fontSize: '11px', fontWeight: '800', marginBottom: '2px', color: colorTexto }}>{nombre}</div>
+      <svg width="54" height="70" viewBox="0 0 60 78">
         <line x1="8" y1="16" x2="52" y2="16" stroke={colorTexto} strokeWidth={trasteInicio === 1 ? "3" : "1"} />
         <line x1="8" y1="28" x2="52" y2="28" stroke={colorLinea} strokeWidth="1" />
         <line x1="8" y1="40" x2="52" y2="40" stroke={colorLinea} strokeWidth="1" />
@@ -150,72 +140,159 @@ function GraficoAcorde({ nombre, modoNoche }) {
   );
 }
 
+function formatearEtiqueta(himno) {
+  if (!himno.numero || himno.numero.trim() === '') return '';
+  const num = himno.numero.trim();
+  if (himno.categoria === 'Suplementarios') return `S-${num}`;
+  if (himno.categoria === 'Complementarios') return `C-${num}`;
+  if (himno.categoria === 'Himnos') return `H-${num}`;
+  return '';
+}
+
+function LineaConAcordes({ texto, semitonos }) {
+  if (!texto.trim()) return <div style={{ height: '14px' }} />;
+
+  const partes = texto.split(/(\[[^\]]+\])/g);
+  const tieneAcordes = /\[[^\]]+\]/.test(texto);
+
+  if (!tieneAcordes) {
+    const esSeccion = /^(ESTROFA|CORO|PUENTE|INTRO|CODA)/i.test(texto.trim());
+    return (
+      <div style={{
+        margin: esSeccion ? '14px 0 4px 0' : '2px 0',
+        fontWeight: esSeccion ? '800' : '400',
+        color: esSeccion ? '#9a3412' : 'inherit',
+        fontSize: esSeccion ? '12px' : '14px',
+        letterSpacing: esSeccion ? '1px' : 'normal'
+      }}>
+        {texto}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', margin: '4px 0 8px 0', lineHeight: '1.2' }}>
+      {partes.map((parte, i) => {
+        if (parte.startsWith('[') && parte.endsWith(']')) {
+          const acordeRaw = parte.slice(1, -1);
+          return (
+            <span key={i} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom', marginRight: '2px' }}>
+              <span style={{ fontSize: '13px', fontWeight: '800', color: '#ea580c', fontFamily: "'Lexend', sans-serif" }}>
+                {transponerAcorde(acordeRaw, semitonos)}
+              </span>
+            </span>
+          );
+        }
+        return (
+          <span key={i} style={{ whiteSpace: 'pre-wrap', fontSize: '14px', color: 'inherit' }}>
+            {parte}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function App() {
-  // Estados de Splash Screen
   const [faseIntro, setFaseIntro] = useState('punto');
   const [ocultarSplash, setOcultarSplash] = useState(false);
 
-  // Vistas: 'menu' | 'categorias' | 'lista' | 'visor' | 'agregar' | 'ajustes'
   const [vistaActual, setVistaActual] = useState('menu');
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
   const [modoNocturno, setModoNocturno] = useState(false);
 
-  // Formulario Agregar Himno
-  const [nuevoNum, setNuevoNum] = useState('');
-  const [nuevoTitulo, setNuevoTitulo] = useState('');
-  const [nuevaCita, setNuevaCita] = useState('');
-  const [nuevaCat, setNuevaCat] = useState('Suplementarios');
-  const [nuevoTono, setNuevoTono] = useState('C');
-  const [nuevoCuerpo, setNuevoCuerpo] = useState('');
+  // Formulario
+  const [idEditando, setIdEditando] = useState(null);
+  const [formCat, setFormCat] = useState('Suplementarios');
+  const [formNum, setFormNum] = useState('');
+  const [formTitulo, setFormTitulo] = useState('');
+  const [formCompas, setFormCompas] = useState('4/4');
+  const [formBpm, setFormBpm] = useState('144');
+  const [formAutor, setFormAutor] = useState('');
+  const [formTono, setFormTono] = useState('A');
+  const [formCuerpo, setFormCuerpo] = useState('');
 
-  // Cancionero
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_cancionero_v3');
+    const local = localStorage.getItem('cifra_cancionero_v5');
     return local ? JSON.parse(local) : [
       {
         id: 1,
         categoria: "Suplementarios",
         numero: "53",
         titulo: "Mídenos, mídenos",
-        cita: "Ez 47:1-12",
-        subtitulo: "(Cifrados simplificados)",
+        compas: "4/4",
+        bpm: "110",
+        autor: "Ez 47:1-12",
         tonoBase: "Dm",
-        rasgueo: "| 1  .  2  .  3  .  4  . |\n  v     ↓  ∧  v  ∧  ↓",
-        acordesUtilizados: ["Dm", "Gm", "C", "F", "A7", "Bb", "Em", "Em7(5b)"],
-        contenido: [
-          { ac: "|[Dm]        |[Gm]        |[C]             |[F]", tx: "1. Al hogar, al hogar, al hogar de Dios," },
-          { ac: "|[Gm]        |[Dm]        |[Gm]     |[A7]", tx: "Donde está el manantial he venido yo," },
-          { ac: "|[Dm]        |[Gm]        |[C]             |[F]", tx: "Un fluir hay aquí que no cesará," },
-          { ac: "|[Gm]        |[Dm]        |[A7]   |[Dm]", tx: "Y hace crecer vida hasta madurar.\n" },
-          { ac: "", tx: "2. Fluye aquí, fluye aquí, un río que va\nPor la tierra a proveer la vida especial;\nPero ve, oh Señor, más profundo aun,\nHasta que nos midas y poseas Tú.\n" },
-          { ac: "|[Bb]           |[C]          |[F]      [Em]    |[Dm]", tx: "Mídenos, mídenos, mide en verdad," },
-          { ac: "|[Bb]           |[Dm]         |[Em7(5b)]  |[A7]", tx: "Mídenos, mídenos, cada día más." },
-          { ac: "|[Bb]        |[Gm]         |[C]             |[F]", tx: "Hasta ver que el fluir, torrente de Dios," },
-          { ac: "|[Gm]        |[Dm]        |[A7]    |[Dm]", tx: "Inunde la tierra por Cristo el Señor.\n" }
-        ]
+        textoCompleto: `ESTROFA 1
+[Dm]Al hogar, al hogar, [Gm]al hogar de Dios,
+[C]Donde está el manantial [F]he venido yo,
+[Gm]Un fluir hay aquí [Dm]que no cesará,
+[A7]Y hace crecer vida [Dm]hasta madurar.
+
+ESTROFA 2
+Fluye aquí, fluye aquí, un río que va
+Por la tierra a proveer la vida especial;
+Pero ve, oh Señor, más profundo aun,
+Hasta que nos midas y poseas Tú.
+
+CORO
+[Bb]Mídenos, mídenos, [C]mide en verdad,
+[F]Mídenos, [Em]mídenos, [Dm]cada día más.
+[Bb]Hasta ver que el fluir, [Gm]torrente de Dios,
+[C]Inunde la tierra por [F]Cristo el Señor.`
       },
       {
         id: 2,
-        categoria: "Himnos Antiguos",
-        numero: "01",
-        titulo: "Santo, Santo, Santo",
-        cita: "Apoc 4:8",
-        subtitulo: "(Himno clásico)",
-        tonoBase: "D",
-        rasgueo: "| 1  .  2  .  3  .  4  . |\n  ↓     ↓     ↓     ↓",
-        acordesUtilizados: ["C", "G", "Am", "F"],
-        contenido: [
-          { ac: "|[C]             |[G]        |[Am]   |[F]", tx: "Santo, Santo, Santo, Señor Omnipotente," },
-          { ac: "|[C]          |[G]          |[F]     |[G]", tx: "Siempre el labio mío loores te dará." }
-        ]
+        categoria: "Nuevos",
+        numero: "",
+        titulo: "La Visión Irresistible",
+        compas: "4/4",
+        bpm: "144",
+        autor: "Hebert Faria / João Luiz / Samuel Huh",
+        tonoBase: "A",
+        textoCompleto: `INTRO [2x]
+|[A]   |[A]   |[D]   |[D]
+
+ESTROFA
+[A]La visión que recibí me [A/C#]conquis[D]tó   [D]
+Y me [D9]hizo renunciar [Bm7]a lo que [E]soy.   [E]
+Aunque [F#m]no la pueda entender,[F#m/E#]
+Ni en pa[F#m/E]labras dar a cono[D#m7(b5)]cer,
+No me [Dm]puedo resis[F]tir a lo que [E]vi:   [E]
+
+PUENTE
+Lo que [Dm]eres, Dios, deseas [Am7]ser en mí.   [Am7]
+En [F]gloria me harás [Dm]parte de [E]Ti.   [E]
+
+CORO 1
+Me entre[Am]garé.
+Nada me impe[Am/G]dirá luchar con[F]tigo,
+Y así por el ca[F]mino estrecho [Dm]sigo,
+¡Olvi[Dm/C]dando, ciertamente, lo que [Bm7(b5)]queda a[E]trás!
+
+CORO 2
+Me entregaré,
+Prosiguiendo, rumbo al amor perfecto.
+Avanzando para lo que he sido hecho:
+Sumer[Dm/C]girme en Tu esencia y [E]unirme a [F#]Ti.
+
+CORO 3
+¡Me vuelvo [Bm]loco!
+Tus promesas se a[Bm/A]cercan final[G]mente,
+Tú y [G]Yo seremos uno para [Em]siempre;
+La per[Em/D]fecta alegría vi[F#]viré al [F#]fin.
+
+CODA [2x]
+[G]¡En [A9]gloria! [Bm]¡En [Bm/A]gloria! [E/G#]
+[G]¡En [A9]gloria! [E4]¡Amém! [E]`
       }
     ];
   });
 
-  const [himnoActivo, setHimnoActivo] = useState(himnos[0]);
+  const [himnoActivo, setHimnoActivo] = useState(himnos[1]);
   const [semitonos, setSemitonos] = useState(0);
 
-  // Animación Splash requerida
   useEffect(() => {
     const t1 = setTimeout(() => setFaseIntro('guitarra'), 700);
     const t2 = setTimeout(() => setFaseIntro('piano'), 1500);
@@ -224,9 +301,8 @@ export default function App() {
     const t5 = setTimeout(() => setFaseIntro('bienvenida'), 4300);
     const t6 = setTimeout(() => {
       setFaseIntro('listo');
-      setTimeout(() => setOcultarSplash(true), 500);
-    }, 5800);
-
+      setTimeout(() => setOcultarSplash(true), 400);
+    }, 5600);
     return () => {
       clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
       clearTimeout(t4); clearTimeout(t5); clearTimeout(t6);
@@ -234,47 +310,77 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_cancionero_v3', JSON.stringify(himnos));
+    localStorage.setItem('cifra_cancionero_v5', JSON.stringify(himnos));
   }, [himnos]);
 
-  // Guardar nuevo himno
-  const manejarAgregarHimno = (e) => {
+  const acordesDelHimno = (texto) => {
+    const matches = texto.match(/\[([^\]]+)\]/g);
+    if (!matches) return [himnoActivo.tonoBase];
+    const lista = [];
+    matches.forEach(m => {
+      const ac = m.slice(1, -1).trim();
+      if (ac && !lista.includes(ac)) lista.push(ac);
+    });
+    return lista.length > 0 ? lista : [himnoActivo.tonoBase];
+  };
+
+  const abrirEditor = (himno) => {
+    setIdEditando(himno.id);
+    setFormCat(himno.categoria);
+    setFormNum(himno.numero || '');
+    setFormTitulo(himno.titulo);
+    setFormCompas(himno.compas || '4/4');
+    setFormBpm(himno.bpm || '120');
+    setFormAutor(himno.autor || '');
+    setFormTono(himno.tonoBase || 'C');
+    setFormCuerpo(himno.textoCompleto || '');
+    setVistaActual('formulario');
+  };
+
+  const abrirNuevo = () => {
+    setIdEditando(null);
+    setFormCat('Suplementarios');
+    setFormNum('');
+    setFormTitulo('');
+    setFormCompas('4/4');
+    setFormBpm('120');
+    setFormAutor('');
+    setFormTono('C');
+    setFormCuerpo('');
+    setVistaActual('formulario');
+  };
+
+  const guardarFormulario = (e) => {
     e.preventDefault();
-    if (!nuevoTitulo.trim()) return;
+    if (!formTitulo.trim()) return;
 
-    // Detectar acordes en corchetes automáticamente
-    const acordesEncontrados = [];
-    const matches = nuevoCuerpo.match(/\[(.*?)\]/g);
-    if (matches) {
-      matches.forEach(m => {
-        const limpia = m.replace(/[\[\]]/g, '').trim();
-        if (limpia && !acordesEncontrados.includes(limpia)) {
-          acordesEncontrados.push(limpia);
-        }
-      });
-    }
-
-    const nuevoObj = {
-      id: Date.now(),
-      categoria: nuevaCat,
-      numero: nuevoNum || "S/N",
-      titulo: nuevoTitulo,
-      cita: nuevaCita,
-      subtitulo: "(Agregado por usuario)",
-      tonoBase: nuevoTono,
-      rasgueo: "| 1 . 2 . 3 . 4 . |\n ↓   ↓   ↓   ↓",
-      acordesUtilizados: acordesEncontrados.length > 0 ? acordesEncontrados : [nuevoTono],
-      contenido: [{ ac: "", tx: nuevoCuerpo }]
+    const objetoHimno = {
+      id: idEditando || Date.now(),
+      categoria: formCat,
+      numero: formCat === 'Nuevos' ? '' : formNum.trim(),
+      titulo: formTitulo.trim(),
+      compas: formCompas.trim() || '4/4',
+      bpm: formBpm.trim() || '120',
+      autor: formAutor.trim(),
+      tonoBase: formTono,
+      textoCompleto: formCuerpo
     };
 
-    setHimnos([nuevoObj, ...himnos]);
-    setNuevoNum('');
-    setNuevoTitulo('');
-    setNuevaCita('');
-    setNuevoCuerpo('');
-    setHimnoActivo(nuevoObj);
+    if (idEditando) {
+      setHimnos(himnos.map(h => h.id === idEditando ? objetoHimno : h));
+    } else {
+      setHimnos([objetoHimno, ...himnos]);
+    }
+
+    setHimnoActivo(objetoHimno);
     setSemitonos(0);
     setVistaActual('visor');
+  };
+
+  const navegarAtras = () => {
+    if (vistaActual === 'visor') setVistaActual('lista');
+    else if (vistaActual === 'lista') setVistaActual('categorias');
+    else if (vistaActual === 'categorias' || vistaActual === 'formulario' || vistaActual === 'ajustes') setVistaActual('menu');
   };
 
   const fondoApp = modoNocturno ? '#0b1120' : '#f8fafc';
@@ -286,14 +392,9 @@ export default function App() {
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: fondoApp, color: colorTexto }}>
       
       <style>{`
-        @keyframes fadeInScale {
-          0% { transform: scale(0.6); opacity: 0; }
+        @keyframes zoomPunto {
+          0% { transform: scale(0.4); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes caer {
-          0% { transform: translateY(-80px); opacity: 0; }
-          60% { transform: translateY(0); opacity: 1; }
-          100% { transform: translateY(0); opacity: 1; }
         }
       `}</style>
 
@@ -310,109 +411,103 @@ export default function App() {
           zIndex: 9999,
           padding: '20px',
           textAlign: 'center',
-          transition: 'opacity 0.5s ease',
+          transition: 'opacity 0.4s ease',
           opacity: faseIntro === 'listo' ? 0 : 1,
           pointerEvents: faseIntro === 'listo' ? 'none' : 'auto'
         }}>
           {faseIntro === 'punto' && (
-            <div style={{ width: '22px', height: '22px', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 0 25px #fff', animation: 'caer 0.6s ease-out forwards' }} />
+            <div style={{ width: '22px', height: '22px', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 0 25px #fff', animation: 'zoomPunto 0.5s ease-out' }} />
           )}
-          {faseIntro === 'guitarra' && <div style={{ animation: 'fadeInScale 0.35s forwards' }}><IconoGuitarra /></div>}
-          {faseIntro === 'piano' && <div style={{ animation: 'fadeInScale 0.35s forwards' }}><IconoPiano /></div>}
-          {faseIntro === 'bateria' && <div style={{ animation: 'fadeInScale 0.35s forwards' }}><IconoBateria /></div>}
+          {faseIntro === 'guitarra' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoGuitarra /></div>}
+          {faseIntro === 'piano' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoPiano /></div>}
+          {faseIntro === 'bateria' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoBateria /></div>}
           {faseIntro === 'nasa' && (
-            <div style={{ animation: 'fadeInScale 0.4s forwards' }}>
-              <h1 style={{ fontSize: '54px', fontWeight: '800', color: '#fff', letterSpacing: '6px', margin: 0 }}>NASA</h1>
+            <div style={{ animation: 'zoomPunto 0.35s forwards' }}>
+              <h1 style={{ fontSize: '52px', fontWeight: '800', color: '#fff', letterSpacing: '6px', margin: 0 }}>NASA</h1>
               <p style={{ color: '#fed7aa', fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '6px' }}>Cifra • Himnario</p>
             </div>
           )}
           {faseIntro === 'bienvenida' && (
-            <div style={{ animation: 'fadeInScale 0.45s forwards' }}>
-              <h2 style={{ fontSize: '26px', fontWeight: '700', color: '#ffedd5', margin: '0 0 6px 0' }}>Bienvenido</h2>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: 0, letterSpacing: '1px' }}>Jesús es el Señor</p>
+            <div style={{ animation: 'zoomPunto 0.4s forwards' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#ffedd5', margin: '0 0 4px 0' }}>Bienvenido</h2>
+              <p style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: 0 }}>Jesús es el Señor</p>
             </div>
           )}
         </div>
       )}
 
-      {/* ENCABEZADO */}
+      {/* HEADER: UN SOLO BOTÓN VOLVER */}
       <header style={{ backgroundColor: fondoTarjeta, borderBottom: `1px solid ${bordeColor}`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setVistaActual('menu')}>
-          <span style={{ backgroundColor: '#9a3412', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontWeight: '800', fontSize: '15px' }}>Cifra</span>
+          <span style={{ backgroundColor: '#9a3412', color: '#fff', padding: '3px 8px', borderRadius: '6px', fontWeight: '800', fontSize: '14px' }}>Cifra</span>
           <span style={{ fontSize: '13px', fontWeight: '700', color: modoNocturno ? '#94a3b8' : '#64748b' }}>NASA</span>
         </div>
 
         {vistaActual !== 'menu' && (
           <button
-            onClick={() => {
-              if (vistaActual === 'visor') setVistaActual('lista');
-              else setVistaActual('menu');
-            }}
-            style={{ background: 'none', border: `1px solid ${bordeColor}`, color: colorTexto, padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '600' }}
+            onClick={navegarAtras}
+            style={{ background: 'none', border: `1px solid ${bordeColor}`, color: colorTexto, padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '13px', fontWeight: '700' }}
           >
-            ← Menú
+            ← Volver
           </button>
         )}
       </header>
 
-      {/* VISTA 1: MENÚ PRINCIPAL */}
+      {/* MENÚ PRINCIPAL */}
       {vistaActual === 'menu' && (
-        <main style={{ maxWidth: '480px', margin: '30px auto', padding: '0 16px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '20px', textAlign: 'center' }}>Menú Principal</h2>
+        <main style={{ maxWidth: '440px', margin: '28px auto', padding: '0 16px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '18px', textAlign: 'center' }}>Menú Principal</h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {/* Opción 1: Himnos */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div
               onClick={() => setVistaActual('categorias')}
-              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '18px 20px', borderRadius: '12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' }}
+              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '16px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div>
-                <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '700', color: '#9a3412' }}>📖 Himnos</h3>
-                <p style={{ margin: 0, fontSize: '13px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Suplementarios, complementarios y más</p>
+                <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700', color: '#9a3412' }}>📖 Himnos</h3>
+                <p style={{ margin: 0, fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Suplementarios, Complementarios, Himnos y Nuevos</p>
               </div>
-              <span style={{ fontSize: '20px', color: '#9a3412', fontWeight: 'bold' }}>→</span>
+              <span style={{ fontSize: '18px', color: '#9a3412', fontWeight: 'bold' }}>→</span>
             </div>
 
-            {/* Opción 2: Agregar Himnos */}
             <div
-              onClick={() => setVistaActual('agregar')}
-              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '18px 20px', borderRadius: '12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' }}
+              onClick={abrirNuevo}
+              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '16px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div>
-                <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '700', color: '#2563eb' }}>➕ Agregar Himnos</h3>
-                <p style={{ margin: 0, fontSize: '13px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Escribir o pegar nuevos cánticos</p>
+                <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700', color: '#2563eb' }}>➕ Agregar Himnos</h3>
+                <p style={{ margin: 0, fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Registrar nuevo cántico o partitura</p>
               </div>
-              <span style={{ fontSize: '20px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
+              <span style={{ fontSize: '18px', color: '#2563eb', fontWeight: 'bold' }}>→</span>
             </div>
 
-            {/* Opción 3: Ajustes */}
             <div
               onClick={() => setVistaActual('ajustes')}
-              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '18px 20px', borderRadius: '12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' }}
+              style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '16px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div>
-                <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '700' }}>⚙️ Ajustes</h3>
-                <p style={{ margin: 0, fontSize: '13px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Modo nocturno para el atril</p>
+                <h3 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '700' }}>⚙️ Ajustes</h3>
+                <p style={{ margin: 0, fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Modo nocturno para el atril</p>
               </div>
-              <span style={{ fontSize: '20px', fontWeight: 'bold' }}>→</span>
+              <span style={{ fontSize: '18px', fontWeight: 'bold' }}>→</span>
             </div>
           </div>
         </main>
       )}
 
-      {/* VISTA 2: SELECCIÓN DE CATEGORÍAS */}
+      {/* CATEGORÍAS */}
       {vistaActual === 'categorias' && (
-        <main style={{ maxWidth: '480px', margin: '24px auto', padding: '0 16px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '14px' }}>Categorías de Himnos</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {["Suplementarios", "Complementarios", "Himnos Antiguos", "Himnos Nuevos"].map(cat => (
+        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '12px' }}>Categorías</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {["Suplementarios", "Complementarios", "Himnos", "Nuevos"].map(cat => (
               <button
                 key={cat}
                 onClick={() => {
                   setCategoriaSel(cat);
                   setVistaActual('lista');
                 }}
-                style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, color: colorTexto, padding: '16px', borderRadius: '10px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '15px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, color: colorTexto, padding: '14px', borderRadius: '8px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '14px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
                 <span>{cat}</span>
                 <span style={{ color: '#9a3412', fontWeight: 'bold' }}>→</span>
@@ -422,87 +517,97 @@ export default function App() {
         </main>
       )}
 
-      {/* VISTA 3: LISTADO DE HIMNOS */}
+      {/* LISTA */}
       {vistaActual === 'lista' && (
-        <main style={{ maxWidth: '600px', margin: '24px auto', padding: '0 16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <div>
-              <h2 style={{ fontSize: '20px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
-              <span style={{ fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Selecciona uno para abrir</span>
-            </div>
-            <button
-              onClick={() => setVistaActual('categorias')}
-              style={{ background: 'none', border: `1px solid ${bordeColor}`, color: colorTexto, padding: '4px 10px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}
-            >
-              Cambiar
-            </button>
+        <main style={{ maxWidth: '520px', margin: '20px auto', padding: '0 16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {himnos.filter(h => h.categoria === categoriaSel).map(h => (
-              <div
-                key={h.id}
-                onClick={() => {
-                  setHimnoActivo(h);
-                  setSemitonos(0);
-                  setVistaActual('visor');
-                }}
-                style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '14px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '14px' }}
-              >
-                <span style={{ fontWeight: '800', color: '#9a3412', fontSize: '18px', minWidth: '32px' }}>{h.numero}</span>
-                <div>
-                  <div style={{ fontWeight: '700', fontSize: '15px' }}>{h.titulo}</div>
-                  {h.cita && <div style={{ fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>{h.cita}</div>}
+            {himnos.filter(h => h.categoria === categoriaSel).map(h => {
+              const prefijo = formatearEtiqueta(h);
+              return (
+                <div
+                  key={h.id}
+                  onClick={() => {
+                    setHimnoActivo(h);
+                    setSemitonos(0);
+                    setVistaActual('visor');
+                  }}
+                  style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '12px 14px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  {prefijo && (
+                    <span style={{ fontWeight: '800', color: '#9a3412', fontSize: '15px' }}>
+                      {prefijo}
+                    </span>
+                  )}
+                  <div style={{ fontWeight: '700', fontSize: '14px' }}>
+                    {h.titulo}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {himnos.filter(h => h.categoria === categoriaSel).length === 0 && (
-              <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
-                No hay himnos registrados en esta categoría aún.
+              <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+                No hay cánticos registrados en esta categoría aún.
               </div>
             )}
           </div>
         </main>
       )}
 
-      {/* VISTA 4: VISOR DE CANCIÓN (CON ACORDES TRANSPUESTOS Y GRÁFICOS) */}
+      {/* VISOR PROFESIONAL (METADATOS EXACTOS, TÍTULO SÓLIDO, EDITAR Y SIN DUPLICADOS) */}
       {vistaActual === 'visor' && (
-        <div style={{ padding: '12px 8px 40px', maxWidth: '820px', margin: '0 auto' }}>
-          {/* Controles de tono */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', padding: '0 6px', flexWrap: 'wrap', gap: '8px' }}>
-            <button
-              onClick={() => setVistaActual('lista')}
-              style={{ background: fondoTarjeta, border: `1px solid ${bordeColor}`, color: colorTexto, padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
-            >
-              ← Volver
-            </button>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ padding: '10px 12px 40px', maxWidth: '640px', margin: '0 auto' }}>
+          
+          {/* Controles: Tonalidad y Editar (Sin botón volver duplicado) */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '12px', fontWeight: '700' }}>TONO:</span>
               <button
                 onClick={() => setSemitonos(s => s - 1)}
                 style={{ width: '28px', height: '28px', borderRadius: '6px', border: `1px solid ${bordeColor}`, background: fondoTarjeta, color: colorTexto, fontWeight: '800', cursor: 'pointer' }}
               >-</button>
-              <span style={{ fontWeight: '800', minWidth: '32px', textAlign: 'center', color: '#9a3412', fontSize: '16px' }}>
+              <span style={{ fontWeight: '800', minWidth: '30px', textAlign: 'center', color: '#ea580c', fontSize: '15px' }}>
                 {transponerAcorde(himnoActivo.tonoBase, semitonos)}
               </span>
               <button
                 onClick={() => setSemitonos(s => s + 1)}
                 style={{ width: '28px', height: '28px', borderRadius: '6px', border: `1px solid ${bordeColor}`, background: fondoTarjeta, color: colorTexto, fontWeight: '800', cursor: 'pointer' }}
               >+</button>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => abrirEditor(himnoActivo)}
+                style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, color: colorTexto, padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}
+              >
+                ✏️ Editar
+              </button>
               <button
                 onClick={() => window.print()}
-                style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}
+                style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}
               >
-                📥 PDF
+                PDF
               </button>
             </div>
           </div>
 
-          {/* Gráficos horizontales de acordes que responden a la transposición */}
-          <div style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, borderRadius: '8px', padding: '10px 12px', marginBottom: '14px', overflowX: 'auto', display: 'flex', gap: '10px', justifyContent: 'flex-start' }}>
-            {himnoActivo.acordesUtilizados.map((ac, idx) => (
+          {/* Carrusel horizontal de acordes */}
+          <div style={{
+            backgroundColor: fondoTarjeta,
+            border: `1px solid ${bordeColor}`,
+            borderRadius: '8px',
+            padding: '8px 10px',
+            marginBottom: '12px',
+            overflowX: 'auto',
+            display: 'flex',
+            gap: '8px',
+            justifyContent: 'flex-start'
+          }}>
+            {acordesDelHimno(himnoActivo.textoCompleto).map((ac, idx) => (
               <GraficoAcorde
                 key={idx}
                 nombre={transponerAcorde(ac, semitonos)}
@@ -511,70 +616,116 @@ export default function App() {
             ))}
           </div>
 
-          {/* Hoja estilo partitura física */}
-          <main style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, padding: '24px 20px', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '28px', fontWeight: '800', color: '#9a3412' }}>{himnoActivo.numero}</span>
-              <h1 style={{ fontSize: '20px', fontWeight: '800', margin: 0 }}>{himnoActivo.titulo}</h1>
-              {himnoActivo.cita && <span style={{ fontSize: '13px', color: modoNocturno ? '#94a3b8' : '#64748b', fontStyle: 'italic' }}>{himnoActivo.cita}</span>}
-            </div>
-            <div style={{ fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b', marginTop: '2px', marginBottom: '16px' }}>
-              {himnoActivo.subtitulo}
+          {/* Hoja de partitura */}
+          <main style={{
+            backgroundColor: fondoTarjeta,
+            border: `1px solid ${bordeColor}`,
+            padding: '24px 20px',
+            borderRadius: '8px',
+            textAlign: 'left'
+          }}>
+            {/* Título en color sólido nítido y sin opacidad */}
+            <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+              <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: colorTexto }}>
+                {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
+              </h1>
+              {himnoActivo.autor && (
+                <div style={{ fontSize: '13px', fontWeight: '600', color: modoNocturno ? '#94a3b8' : '#64748b' }}>
+                  {himnoActivo.autor}
+                </div>
+              )}
             </div>
 
-            {/* Letra y cifrados */}
-            <div style={{ lineHeight: '1.6', fontSize: '14px' }}>
-              {himnoActivo.contenido.map((elem, i) => (
-                <div key={i} style={{ marginBottom: elem.ac ? '10px' : '16px' }}>
-                  {elem.ac && (
-                    <div style={{ fontFamily: "'Lexend', monospace", fontWeight: '700', color: '#9a3412', fontSize: '14px', whiteSpace: 'pre-wrap' }}>
-                      {elem.ac.replace(/\[(.*?)\]/g, (m, ac) => transponerAcorde(ac, semitonos))}
-                    </div>
-                  )}
-                  <div style={{ whiteSpace: 'pre-line' }}>{elem.tx}</div>
-                </div>
+            {/* Metadatos técnicos exactos */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', color: modoNocturno ? '#cbd5e1' : '#475569', borderBottom: `1px solid ${bordeColor}`, paddingBottom: '8px', marginBottom: '14px' }}>
+              <span>[{himnoActivo.compas || '4/4'}] [{himnoActivo.bpm ? `${himnoActivo.bpm}bpm` : '120bpm'}]</span>
+              <span>Tonalidad: {transponerAcorde(himnoActivo.tonoBase, semitonos)}</span>
+            </div>
+
+            {/* Letra y acordes alineados */}
+            <div style={{ textAlign: 'left', wordBreak: 'break-word' }}>
+              {himnoActivo.textoCompleto.split('\n').map((linea, idx) => (
+                <LineaConAcordes key={idx} texto={linea} semitonos={semitonos} />
               ))}
             </div>
           </main>
         </div>
       )}
 
-      {/* VISTA 5: AGREGAR HIMNO */}
-      {vistaActual === 'agregar' && (
-        <main style={{ maxWidth: '520px', margin: '24px auto', padding: '0 16px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '14px' }}>Agregar Nuevo Himno</h2>
-          <form onSubmit={manejarAgregarHimno} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* FORMULARIO AGREGAR / EDITAR */}
+      {vistaActual === 'formulario' && (
+        <main style={{ maxWidth: '480px', margin: '18px auto', padding: '0 16px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '14px' }}>
+            {idEditando ? '✏️ Editar Himno' : '➕ Agregar Nuevo Himno'}
+          </h2>
+
+          <form onSubmit={guardarFormulario} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700' }}>Categoría:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700' }}>Categoría:</label>
               <select
-                value={nuevaCat}
-                onChange={e => setNuevaCat(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', sans-serif" }}
+                value={formCat}
+                onChange={e => setFormCat(e.target.value)}
+                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', sans-serif" }}
               >
-                <option value="Suplementarios">Suplementarios</option>
-                <option value="Complementarios">Complementarios</option>
-                <option value="Himnos Antiguos">Himnos Antiguos</option>
-                <option value="Himnos Nuevos">Himnos Nuevos</option>
+                <option value="Suplementarios">Suplementarios (S-)</option>
+                <option value="Complementarios">Complementarios (C-)</option>
+                <option value="Himnos">Himnos (H-)</option>
+                <option value="Nuevos">Nuevos (Sin número)</option>
               </select>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '10px' }}>
+            {formCat !== 'Nuevos' && (
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700' }}>Número:</label>
+                <label style={{ fontSize: '11px', fontWeight: '700' }}>Número (solo dígitos):</label>
                 <input
                   type="text"
-                  placeholder="Ej: 54"
-                  value={nuevoNum}
-                  onChange={e => setNuevoNum(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+                  placeholder="Ej: 21"
+                  value={formNum}
+                  onChange={e => setFormNum(e.target.value)}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+                />
+              </div>
+            )}
+
+            <div>
+              <label style={{ fontSize: '11px', fontWeight: '700' }}>Título del cántico:</label>
+              <input
+                type="text"
+                placeholder="Nombre del himno..."
+                value={formTitulo}
+                onChange={e => setFormTitulo(e.target.value)}
+                required
+                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+              <div>
+                <label style={{ fontSize: '11px', fontWeight: '700' }}>Compás:</label>
+                <input
+                  type="text"
+                  placeholder="4/4"
+                  value={formCompas}
+                  onChange={e => setFormCompas(e.target.value)}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700' }}>Tonalidad base:</label>
+                <label style={{ fontSize: '11px', fontWeight: '700' }}>BPM:</label>
+                <input
+                  type="text"
+                  placeholder="144"
+                  value={formBpm}
+                  onChange={e => setFormBpm(e.target.value)}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '11px', fontWeight: '700' }}>Tonalidad:</label>
                 <select
-                  value={nuevoTono}
-                  onChange={e => setNuevoTono(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+                  value={formTono}
+                  onChange={e => setFormTono(e.target.value)}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
                 >
                   {NOTAS_SOST.map(n => <option key={n} value={n}>{n}</option>)}
                   {["Dm", "Em", "Am", "Bm", "F#m", "Gm"].map(n => <option key={n} value={n}>{n}</option>)}
@@ -583,64 +734,52 @@ export default function App() {
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700' }}>Título del cántico:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700' }}>Autor(es) / Referencia:</label>
               <input
                 type="text"
-                placeholder="Nombre del himno..."
-                value={nuevoTitulo}
-                onChange={e => setNuevoTitulo(e.target.value)}
-                required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
+                placeholder="Ej: Hebert Faria / João Luiz / Samuel Huh"
+                value={formAutor}
+                onChange={e => setFormAutor(e.target.value)}
+                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700' }}>Cita bíblica (opcional):</label>
-              <input
-                type="text"
-                placeholder="Ej: Salmos 23:1"
-                value={nuevaCita}
-                onChange={e => setNuevaCita(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, boxSizing: 'border-box' }}
-              />
-            </div>
-
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: '700' }}>Letra con acordes (usa corchetes [C], [G], etc.):</label>
+              <label style={{ fontSize: '11px', fontWeight: '700' }}>Letra con acordes [C], [D], etc.:</label>
               <textarea
-                rows="8"
-                placeholder={"|[C]      |[G]\nHe decidido seguir a Cristo\n|[C]      |[F]\nHe decidido seguir a Cristo"}
-                value={nuevoCuerpo}
-                onChange={e => setNuevoCuerpo(e.target.value)}
+                rows="9"
+                placeholder="[A]La visión que recibí me [A/C#]conquis[D]tó..."
+                value={formCuerpo}
+                onChange={e => setFormCuerpo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', monospace", fontSize: '13px', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '6px', border: `1px solid ${bordeColor}`, backgroundColor: fondoTarjeta, color: colorTexto, fontFamily: "'Lexend', sans-serif", fontSize: '12px', boxSizing: 'border-box' }}
               />
             </div>
 
             <button
               type="submit"
-              style={{ backgroundColor: '#9a3412', color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '800', cursor: 'pointer', fontSize: '15px', marginTop: '6px' }}
+              style={{ backgroundColor: '#9a3412', color: '#fff', padding: '10px', borderRadius: '6px', border: 'none', fontWeight: '800', cursor: 'pointer', fontSize: '14px', marginTop: '4px' }}
             >
-              Guardar Himno
+              {idEditando ? 'Guardar Cambios' : 'Guardar Himno'}
             </button>
           </form>
         </main>
       )}
 
-      {/* VISTA 6: AJUSTES */}
+      {/* AJUSTES */}
       {vistaActual === 'ajustes' && (
-        <main style={{ maxWidth: '480px', margin: '24px auto', padding: '0 16px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '14px' }}>Ajustes</h2>
-          <div style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, borderRadius: '10px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '12px' }}>Ajustes</h2>
+          <div style={{ backgroundColor: fondoTarjeta, border: `1px solid ${bordeColor}`, borderRadius: '8px', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <div style={{ fontWeight: '700', fontSize: '15px' }}>Modo nocturno</div>
-              <div style={{ fontSize: '12px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Fondo oscuro para usar en el atril</div>
+              <div style={{ fontWeight: '700', fontSize: '14px' }}>Modo nocturno</div>
+              <div style={{ fontSize: '11px', color: modoNocturno ? '#94a3b8' : '#64748b' }}>Fondo oscuro para atril</div>
             </div>
             <button
               onClick={() => setModoNocturno(!modoNocturno)}
-              style={{ width: '50px', height: '28px', backgroundColor: modoNocturno ? '#9a3412' : '#cbd5e1', borderRadius: '14px', border: 'none', cursor: 'pointer', position: 'relative' }}
+              style={{ width: '48px', height: '26px', backgroundColor: modoNocturno ? '#9a3412' : '#cbd5e1', borderRadius: '13px', border: 'none', cursor: 'pointer', position: 'relative' }}
             >
-              <div style={{ width: '22px', height: '22px', backgroundColor: '#fff', borderRadius: '50%', position: 'absolute', top: '3px', left: modoNocturno ? '25px' : '3px', transition: 'left 0.2s' }} />
+              <div style={{ width: '20px', height: '20px', backgroundColor: '#fff', borderRadius: '50%', position: 'absolute', top: '3px', left: modoNocturno ? '25px' : '3px', transition: 'left 0.2s' }} />
             </button>
           </div>
         </main>
