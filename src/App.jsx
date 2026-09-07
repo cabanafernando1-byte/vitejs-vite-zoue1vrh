@@ -8,35 +8,67 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
   document.head.appendChild(linkLexend);
 }
 
-// Iconos vectoriales de la intro
+// ILUSTRACIONES EXACTAS DE LOS TRES INSTRUMENTOS
 const IconoGuitarra = () => (
-  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m19 5-3-3" />
-    <path d="m2 22 5.5-1.5L21.3 6.7a2.4 2.4 0 0 0 0-3.4l-1-1a2.4 2.4 0 0 0-3.4 0L2.7 16.5 2 22z" />
-    <circle cx="14.5" cy="9.5" r="1.5" fill="#fff" />
+  <svg width="120" height="120" viewBox="0 0 512 512" fill="none">
+    <path d="M430 40 L470 75 L415 130 L375 95 Z" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14" strokeLinejoin="round"/>
+    <path d="M400 110 L230 280 L200 250 L370 80 Z" fill="#e29578" stroke="#1e1e1e" strokeWidth="14" strokeLinejoin="round"/>
+    <path d="M220 230 C270 200 320 270 290 320 C320 370 270 440 180 470 C90 500 30 430 40 350 C50 270 120 220 180 270 Z" fill="#b4533c" stroke="#1e1e1e" strokeWidth="16" strokeLinejoin="round"/>
+    <circle cx="180" cy="330" r="40" fill="#588157" stroke="#1e1e1e" strokeWidth="14"/>
+    <circle cx="180" cy="330" r="24" fill="#6c757d"/>
+    <rect x="90" y="360" width="70" height="40" rx="8" transform="rotate(-40 125 380)" fill="#1e1e1e"/>
+    <rect x="98" y="368" width="54" height="24" rx="4" transform="rotate(-40 125 380)" fill="#f8fafc"/>
   </svg>
 );
 
 const IconoPiano = () => (
-  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="15" x="2" y="5" rx="2" />
-    <path d="M6 9v5" /><path d="M10 9v5" /><path d="M14 9v5" /><path d="M18 9v5" />
-    <path d="M2 14h20" />
+  <svg width="130" height="110" viewBox="0 0 512 400" fill="none">
+    <rect x="20" y="20" width="472" height="360" rx="28" fill="#4a4e69" stroke="#1e1e1e" strokeWidth="18"/>
+    <line x1="20" y1="130" x2="492" y2="130" stroke="#1e1e1e" strokeWidth="16"/>
+    <line x1="50" y1="55" x2="50" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
+    <line x1="75" y1="55" x2="75" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
+    <line x1="100" y1="55" x2="100" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
+    <rect x="135" y="45" width="180" height="50" rx="8" fill="#80ed99" stroke="#1e1e1e" strokeWidth="12"/>
+    <circle cx="365" cy="70" r="18" fill="#adb5bd" stroke="#1e1e1e" strokeWidth="12"/>
+    <circle cx="430" cy="70" r="18" fill="#f77f00" stroke="#1e1e1e" strokeWidth="12"/>
+    <g transform="translate(36, 145)">
+      <rect x="0" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="62" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="124" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="186" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="248" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="310" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="372" y="0" width="68" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
+      <rect x="42" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
+      <rect x="106" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
+      <rect x="230" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
+      <rect x="292" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
+      <rect x="354" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
+    </g>
   </svg>
 );
 
 const IconoBateria = () => (
-  <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="12" cy="7" rx="9" ry="3.5" />
-    <path d="M3 7v9c0 1.9 4 3.5 9 3.5s9-1.6 9-3.5V7" />
-    <path d="m6 3 5 4" /><path d="m18 3-5 4" />
+  <svg width="130" height="130" viewBox="0 0 512 512" fill="none">
+    <rect x="135" y="70" width="110" height="75" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
+    <rect x="130" y="60" width="120" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
+    <rect x="275" y="70" width="110" height="75" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
+    <rect x="270" y="60" width="120" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
+    <rect x="25" y="190" width="130" height="170" rx="16" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
+    <rect x="20" y="180" width="140" height="24" rx="12" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
+    <line x1="55" y1="230" x2="55" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
+    <line x1="90" y1="230" x2="90" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
+    <line x1="125" y1="230" x2="125" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
+    <rect x="350" y="240" width="140" height="60" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
+    <rect x="345" y="230" width="150" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
+    <circle cx="260" cy="350" r="115" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="20"/>
+    <circle cx="260" cy="350" r="85" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="14" strokeDasharray="140 30"/>
   </svg>
 );
 
-// Motor de notas y transposición
+// Transposición y Notas
 const NOTAS_SOST = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const NOTAS_BEMOL = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
-
 const INDICES_NOTAS = {
   "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3,
   "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
@@ -57,7 +89,7 @@ function transponerAcorde(acorde, semitonos) {
   return acorde.replace(/[A-G][b#]?/g, (m) => transponerNota(m, semitonos));
 }
 
-// MOTOR DINÁMICO DE ACORDES (SISTEMA CAGED Y CEJILLAS MÓVILES)
+// Generador de acordes móviles (CAGED / Cejillas)
 function calcularDiagramaAcorde(nombreAcorde) {
   if (!nombreAcorde) return null;
   const limpio = nombreAcorde.split('/')[0].trim();
@@ -68,7 +100,6 @@ function calcularDiagramaAcorde(nombreAcorde) {
   const semitonoRaiz = INDICES_NOTAS[raiz];
   if (semitonoRaiz === undefined) return null;
 
-  // 1. Acordes abiertos base
   const basicos = {
     "C": { trastes: [-1, 3, 2, 0, 1, 0], dedos: ["", "3", "2", "", "1", ""], base: 1 },
     "C7": { trastes: [-1, 3, 2, 3, 1, -1], dedos: ["", "3", "2", "4", "1", ""], base: 1 },
@@ -92,64 +123,31 @@ function calcularDiagramaAcorde(nombreAcorde) {
 
   if (basicos[limpio]) return basicos[limpio];
 
-  // 2. Acordes Menores (m) móviles
   if (tipo === "m") {
-    let traste6 = (semitonoRaiz - 4 + 12) % 12; // Forma Em (cuerda 6)
+    let traste6 = (semitonoRaiz - 4 + 12) % 12;
     if (traste6 >= 1 && traste6 <= 8) {
-      return {
-        base: traste6,
-        cejilla: traste6,
-        trastes: [traste6, traste6 + 2, traste6 + 2, traste6, traste6, traste6],
-        dedos: ["1", "3", "4", "1", "1", "1"]
-      };
+      return { base: traste6, cejilla: traste6, trastes: [traste6, traste6 + 2, traste6 + 2, traste6, traste6, traste6], dedos: ["1", "3", "4", "1", "1", "1"] };
     }
-    let traste5 = (semitonoRaiz - 9 + 12) % 12; // Forma Am (cuerda 5)
-    return {
-      base: traste5,
-      cejilla: traste5,
-      trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 1, traste5],
-      dedos: ["", "1", "3", "4", "2", "1"]
-    };
+    let traste5 = (semitonoRaiz - 9 + 12) % 12;
+    return { base: traste5, cejilla: traste5, trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 1, traste5], dedos: ["", "1", "3", "4", "2", "1"] };
   }
 
-  // 3. Acordes con Séptima Dominante (7) móviles
   if (tipo === "7") {
     let traste6 = (semitonoRaiz - 4 + 12) % 12;
     if (traste6 >= 1 && traste6 <= 8) {
-      return {
-        base: traste6,
-        cejilla: traste6,
-        trastes: [traste6, traste6 + 2, traste6, traste6 + 1, traste6, traste6],
-        dedos: ["1", "3", "1", "2", "1", "1"]
-      };
+      return { base: traste6, cejilla: traste6, trastes: [traste6, traste6 + 2, traste6, traste6 + 1, traste6, traste6], dedos: ["1", "3", "1", "2", "1", "1"] };
     }
     let traste5 = (semitonoRaiz - 9 + 12) % 12;
-    return {
-      base: traste5,
-      cejilla: traste5,
-      trastes: [-1, traste5, traste5 + 2, traste5, traste5 + 2, traste5],
-      dedos: ["", "1", "3", "1", "4", "1"]
-    };
+    return { base: traste5, cejilla: traste5, trastes: [-1, traste5, traste5 + 2, traste5, traste5 + 2, traste5], dedos: ["", "1", "3", "1", "4", "1"] };
   }
 
-  // 4. Acordes Mayores móviles (Fm, G#, C#, D#, etc.)
   let traste6 = (semitonoRaiz - 4 + 12) % 12;
   if (traste6 >= 1 && traste6 <= 8) {
-    return {
-      base: traste6,
-      cejilla: traste6,
-      trastes: [traste6, traste6 + 2, traste6 + 2, traste6 + 1, traste6, traste6],
-      dedos: ["1", "3", "4", "2", "1", "1"]
-    };
+    return { base: traste6, cejilla: traste6, trastes: [traste6, traste6 + 2, traste6 + 2, traste6 + 1, traste6, traste6], dedos: ["1", "3", "4", "2", "1", "1"] };
   }
 
   let traste5 = (semitonoRaiz - 9 + 12) % 12;
-  return {
-    base: traste5,
-    cejilla: traste5,
-    trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 2, traste5],
-    dedos: ["", "1", "2", "3", "4", "1"]
-  };
+  return { base: traste5, cejilla: traste5, trastes: [-1, traste5, traste5 + 2, traste5 + 2, traste5 + 2, traste5], dedos: ["", "1", "2", "3", "4", "1"] };
 }
 
 function GraficoAcorde({ nombre, modoNoche }) {
@@ -172,15 +170,12 @@ function GraficoAcorde({ nombre, modoNoche }) {
         <line x1="8" y1="40" x2="52" y2="40" stroke={colorLinea} strokeWidth="1" />
         <line x1="8" y1="52" x2="52" y2="52" stroke={colorLinea} strokeWidth="1" />
         <line x1="8" y1="64" x2="52" y2="64" stroke={colorLinea} strokeWidth="1" />
-
         {[8, 16.8, 25.6, 34.4, 43.2, 52].map((x, i) => (
           <line key={i} x1={x} y1="16" x2={x} y2="64" stroke={colorLinea} strokeWidth="1" />
         ))}
-
         {trasteInicio > 1 && (
           <text x="2" y="26" fontSize="9" fontWeight="bold" fill={colorTexto}>{trasteInicio}</text>
         )}
-
         {datos.trastes.map((t, i) => {
           const x = 8 + i * 8.8;
           if (t === -1) return <text key={i} x={x} y="11" fontSize="8" textAnchor="middle" fill="#94a3b8">×</text>;
@@ -189,11 +184,9 @@ function GraficoAcorde({ nombre, modoNoche }) {
           }
           return null;
         })}
-
         {datos.cejilla && (
           <rect x="7" y="19" width="46" height="5" rx="2.5" fill={colorTexto} />
         )}
-
         {datos.trastes.map((t, i) => {
           if (t <= 0) return null;
           const x = 8 + i * 8.8;
@@ -225,7 +218,7 @@ function formatearEtiqueta(himno) {
   return '';
 }
 
-// RENDER CHORDPRO PRECISO (ACORDE ARRIBA DE CADA SÍLABA)
+// RENDER CHORDPRO PRECISO
 function RenderLineaChordPro({ linea, semitonos }) {
   const lineaTrim = linea.trim();
   if (!lineaTrim) return <div style={{ height: '14px' }} />;
@@ -233,14 +226,7 @@ function RenderLineaChordPro({ linea, semitonos }) {
   const esSeccion = /^(ESTROFA|CORO|PUENTE|INTRO|CODA)/i.test(lineaTrim);
   if (esSeccion) {
     return (
-      <div style={{
-        marginTop: '16px',
-        marginBottom: '4px',
-        fontWeight: '800',
-        fontSize: '12px',
-        color: '#9a3412',
-        letterSpacing: '1px'
-      }}>
+      <div style={{ marginTop: '16px', marginBottom: '4px', fontWeight: '800', fontSize: '12px', color: '#9a3412', letterSpacing: '1px' }}>
         {lineaTrim}
       </div>
     );
@@ -249,13 +235,7 @@ function RenderLineaChordPro({ linea, semitonos }) {
   const palabras = linea.split(/(\s+)/);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      alignItems: 'flex-end',
-      minHeight: '38px',
-      margin: '2px 0'
-    }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', minHeight: '38px', margin: '2px 0' }}>
       {palabras.map((palabra, pIdx) => {
         if (/^\s+$/.test(palabra)) {
           return <span key={pIdx} style={{ whiteSpace: 'pre' }}>{palabra}</span>;
@@ -279,13 +259,7 @@ function RenderLineaChordPro({ linea, semitonos }) {
               if (acordeActual) {
                 return (
                   <span key={fIdx} style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
-                    <span style={{
-                      fontSize: '12px',
-                      fontWeight: '800',
-                      color: '#ea580c',
-                      lineHeight: '1.2',
-                      fontFamily: "'Lexend', sans-serif"
-                    }}>
+                    <span style={{ fontSize: '12px', fontWeight: '800', color: '#ea580c', lineHeight: '1.2', fontFamily: "'Lexend', sans-serif" }}>
                       {transponerAcorde(acordeActual, semitonos)}
                     </span>
                     <span style={{ fontSize: '15px', lineHeight: '1.2' }}>
@@ -304,12 +278,7 @@ function RenderLineaChordPro({ linea, semitonos }) {
             })}
             {ultimoAcorde && (
               <span style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'bottom' }}>
-                <span style={{
-                  fontSize: '12px',
-                  fontWeight: '800',
-                  color: '#ea580c',
-                  lineHeight: '1.2'
-                }}>
+                <span style={{ fontSize: '12px', fontWeight: '800', color: '#ea580c', lineHeight: '1.2' }}>
                   {transponerAcorde(ultimoAcorde, semitonos)}
                 </span>
                 <span style={{ fontSize: '15px', lineHeight: '1.2' }}>&nbsp;</span>
@@ -330,7 +299,6 @@ export default function App() {
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
   const [modoNocturno, setModoNocturno] = useState(false);
 
-  // Formulario Agregar / Editar
   const [idEditando, setIdEditando] = useState(null);
   const [formCat, setFormCat] = useState('Suplementarios');
   const [formNum, setFormNum] = useState('');
@@ -342,7 +310,7 @@ export default function App() {
   const [formCuerpo, setFormCuerpo] = useState('');
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_cancionero_v8');
+    const local = localStorage.getItem('cifra_cancionero_v9');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -424,14 +392,14 @@ CODA [2x]
 
   useEffect(() => {
     const t1 = setTimeout(() => setFaseIntro('guitarra'), 700);
-    const t2 = setTimeout(() => setFaseIntro('piano'), 1500);
-    const t3 = setTimeout(() => setFaseIntro('bateria'), 2300);
-    const t4 = setTimeout(() => setFaseIntro('nasa'), 3100);
-    const t5 = setTimeout(() => setFaseIntro('bienvenida'), 4300);
+    const t2 = setTimeout(() => setFaseIntro('piano'), 1700);
+    const t3 = setTimeout(() => setFaseIntro('bateria'), 2700);
+    const t4 = setTimeout(() => setFaseIntro('nasa'), 3700);
+    const t5 = setTimeout(() => setFaseIntro('bienvenida'), 4900);
     const t6 = setTimeout(() => {
       setFaseIntro('listo');
       setTimeout(() => setOcultarSplash(true), 400);
-    }, 5600);
+    }, 6200);
     return () => {
       clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
       clearTimeout(t4); clearTimeout(t5); clearTimeout(t6);
@@ -439,7 +407,7 @@ CODA [2x]
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_cancionero_v8', JSON.stringify(himnos));
+    localStorage.setItem('cifra_cancionero_v9', JSON.stringify(himnos));
   }, [himnos]);
 
   const acordesDelHimno = (texto) => {
@@ -520,7 +488,6 @@ CODA [2x]
   return (
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: fondoApp, color: colorTexto }}>
       
-      {/* ESTILOS DE ANIMACIÓN E IMPRESIÓN LIMPIA DE PDF */}
       <style>{`
         @keyframes zoomPunto {
           0% { transform: scale(0.4); opacity: 0; }
@@ -533,7 +500,7 @@ CODA [2x]
         }
       `}</style>
 
-      {/* SPLASH ANIMATION */}
+      {/* SPLASH ANIMATION CON LAS ILUSTRACIONES PRECISAS */}
       {!ocultarSplash && (
         <div style={{
           position: 'fixed',
@@ -553,17 +520,17 @@ CODA [2x]
           {faseIntro === 'punto' && (
             <div style={{ width: '22px', height: '22px', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 0 25px #fff', animation: 'zoomPunto 0.5s ease-out' }} />
           )}
-          {faseIntro === 'guitarra' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoGuitarra /></div>}
-          {faseIntro === 'piano' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoPiano /></div>}
-          {faseIntro === 'bateria' && <div style={{ animation: 'zoomPunto 0.3s forwards' }}><IconoBateria /></div>}
+          {faseIntro === 'guitarra' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoGuitarra /></div>}
+          {faseIntro === 'piano' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoPiano /></div>}
+          {faseIntro === 'bateria' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoBateria /></div>}
           {faseIntro === 'nasa' && (
-            <div style={{ animation: 'zoomPunto 0.35s forwards' }}>
+            <div style={{ animation: 'zoomPunto 0.4s forwards' }}>
               <h1 style={{ fontSize: '52px', fontWeight: '800', color: '#fff', letterSpacing: '6px', margin: 0 }}>NASA</h1>
               <p style={{ color: '#fed7aa', fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '6px' }}>Cifra • Himnario</p>
             </div>
           )}
           {faseIntro === 'bienvenida' && (
-            <div style={{ animation: 'zoomPunto 0.4s forwards' }}>
+            <div style={{ animation: 'zoomPunto 0.45s forwards' }}>
               <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#ffedd5', margin: '0 0 4px 0' }}>Bienvenido</h2>
               <p style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: 0 }}>Jesús es el Señor</p>
             </div>
@@ -727,7 +694,7 @@ CODA [2x]
             </div>
           </div>
 
-          {/* Carrusel horizontal de acordes calculados dinámicamente */}
+          {/* Carrusel horizontal de acordes calculados */}
           <div style={{
             backgroundColor: fondoTarjeta,
             border: `1px solid ${bordeColor}`,
