@@ -69,7 +69,7 @@ const IconoBateria = () => (
 );
 
 /* -------------------------------------------------------------------------- */
-/*  Iconos Auxiliares SVG                                                     */
+/*  Iconos SVG Auxiliares                                                     */
 /* -------------------------------------------------------------------------- */
 function Icon({ name, size = 20 }) {
   const common = {
@@ -199,7 +199,7 @@ function calcularDiagramaAcorde(nombreAcorde) {
 
   let t6 = (semitonoRaiz - 4 + 12) % 12;
   if (t6 >= 1 && t6 <= 8) {
-    return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6 + 2, t6 + 1, t6, t6] };
+    return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6 + 2, t6, t6] };
   }
   let t5 = (semitonoRaiz - 9 + 12) % 12;
   return { baseFret: t5, barre: { fret: t5, from: 1, to: 5 }, frets: [-1, t5, t5 + 2, t5 + 2, t5 + 2, t5] };
@@ -383,7 +383,7 @@ export default function App() {
   const [scrolling, setScrolling] = useState(false);
   const [speed, setSpeed] = useState(1);
 
-  // Estados del Menú V0
+  // Estados del Menú
   const [query, setQuery] = useState('');
   const [tab, setTab] = useState('recent');
 
@@ -400,7 +400,7 @@ export default function App() {
 
   const scrollRef = useRef(null);
 
-  // Paleta dinámica oficial V0
+  // Paleta oficial
   const t = modoOscuro ? {
     bg: '#0b1120',
     surface: '#111a2e',
@@ -430,7 +430,7 @@ export default function App() {
   };
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_nasa_v13');
+    const local = localStorage.getItem('cifra_nasa_v14');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -525,12 +525,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   });
 
   const [himnoActivo, setHimnoActivo] = useState(himnos[0]);
-
-  // Historial y favoritos
   const [recientes, setRecientes] = useState([himnos[0], himnos[1]]);
   const [favoritos, setFavoritos] = useState([himnos[0]]);
 
-  // Intro animada
+  // Intro cronometrada
   useEffect(() => {
     const t1 = setTimeout(() => setFaseIntro('guitarra'), 700);
     const t2 = setTimeout(() => setFaseIntro('piano'), 1700);
@@ -548,7 +546,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_nasa_v13', JSON.stringify(himnos));
+    localStorage.setItem('cifra_nasa_v14', JSON.stringify(himnos));
   }, [himnos]);
 
   // Auto-scroll loop
@@ -669,7 +667,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const labelSemitonos = semitonos === 0 ? '0' : semitonos > 0 ? `+${semitonos}` : `${semitonos}`;
   const tonoActual = transposeChord(himnoActivo.tonoBase, semitonos);
 
-  // Categorías con conteos dinámicos
   const CATEGORIES = [
     { key: 'Suplementarios', title: 'Suplementarios', badge: 'S-', count: himnos.filter(h => h.categoria === 'Suplementarios').length, hint: 'Himnario suplementario', icon: 'stack' },
     { key: 'Complementarios', title: 'Complementarios', badge: 'C-', count: himnos.filter(h => h.categoria === 'Complementarios').length, hint: 'Cantos complementarios', icon: 'layers' },
@@ -677,7 +674,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
     { key: 'Nuevos', title: 'Nuevos', badge: '✨', count: himnos.filter(h => h.categoria === 'Nuevos').length, hint: 'Agregados recientemente', icon: 'sparkle' },
   ];
 
-  // Filtro de búsqueda en vivo
   const himnosFiltrados = query.trim() === '' ? [] : himnos.filter(h => {
     const q = query.toLowerCase().trim();
     const coincideTitulo = h.titulo.toLowerCase().includes(q);
@@ -690,7 +686,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   return (
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: t.bg, color: t.text, transition: 'background 0.3s ease, color 0.3s ease' }}>
       
-      {/* Estilos generales y reglas de impresión */}
+      {/* Reglas de impresión y utilidades */}
       <style>{`
         @keyframes zoomPunto {
           0% { transform: scale(0.4); opacity: 0; }
@@ -828,27 +824,36 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         </div>
       )}
 
-      {/* MENÚ PRINCIPAL V0 */}
+      {/* MENÚ PRINCIPAL CON PADDINGS MÓVILES AJUSTADOS */}
       {vistaActual === 'menu' && (
-        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
-          <div style={{ width: '100%', maxWidth: 430, minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '16px 18px 0', gap: 22 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
+          <div style={{
+            width: '100%',
+            maxWidth: 440,
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: 'max(24px, env(safe-area-inset-top)) 20px max(32px, env(safe-area-inset-bottom)) 20px',
+            gap: 20,
+            boxSizing: 'border-box'
+          }}>
             
-            {/* Header */}
-            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 6 }}>
+            {/* Header del Menú con márgenes seguros */}
+            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{
                   background: t.accent,
                   color: t.onAccent,
                   fontWeight: 700,
                   fontSize: 15,
-                  padding: '6px 11px',
+                  padding: '6px 12px',
                   borderRadius: 10,
                   lineHeight: 1,
                   boxShadow: `0 6px 18px ${t.accentSoft}`,
                 }}>
                   Cifra
                 </span>
-                <span style={{ fontWeight: 700, fontSize: 21, letterSpacing: '0.04em', lineHeight: 1 }}>NASA</span>
+                <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: '0.04em', lineHeight: 1 }}>NASA</span>
               </div>
 
               <div style={{ display: 'flex', gap: 10 }}>
@@ -904,6 +909,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                 borderRadius: 999,
                 padding: '14px 18px',
                 color: t.muted,
+                boxShadow: t.shadow
               }}>
                 <Icon name="search" size={20} />
                 <input
@@ -922,15 +928,15 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   }}
                 />
                 {query && (
-                  <span style={{ fontSize: 12, color: t.accent, fontWeight: 600 }}>
+                  <span style={{ fontSize: 12, color: t.accent, fontWeight: 700 }}>
                     {/^\d+$/.test(query) ? `Nº ${query}` : 'Título'}
                   </span>
                 )}
               </label>
 
-              {/* Resultados de búsqueda si hay texto */}
+              {/* Resultados de búsqueda */}
               {query.trim() !== '' && (
-                <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {himnosFiltrados.map(h => (
                     <div
                       key={h.id}
@@ -945,7 +951,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                     </div>
                   ))}
                   {himnosFiltrados.length === 0 && (
-                    <div style={{ padding: '12px', textAlign: 'center', fontSize: 13, color: t.muted }}>
+                    <div style={{ padding: '14px', textAlign: 'center', fontSize: 13, color: t.muted }}>
                       No se encontraron cánticos
                     </div>
                   )}
@@ -953,15 +959,15 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
               )}
             </section>
 
-            {/* Cuadrícula de Categorías */}
+            {/* Bloques de Categorías y Acciones */}
             {query.trim() === '' && (
               <>
                 <section aria-labelledby="cats">
                   <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <h2 id="cats" style={{ margin: 0, fontSize: 13, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: t.muted }}>
+                    <h2 id="cats" style={{ margin: 0, fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: t.muted }}>
                       Categorías
                     </h2>
-                    <span style={{ fontSize: 12, color: t.faint }}>{himnos.length} cantos</span>
+                    <span style={{ fontSize: 12, color: t.faint, fontWeight: 600 }}>{himnos.length} cantos</span>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                     {CATEGORIES.map((c) => (
@@ -978,7 +984,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           textAlign: 'left',
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: 18,
+                          gap: 16,
                           padding: 16,
                           minHeight: 138,
                           cursor: 'pointer'
@@ -1011,9 +1017,9 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           </span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                          <span style={{ fontWeight: 600, fontSize: 15 }}>{c.title}</span>
+                          <span style={{ fontWeight: 700, fontSize: 15 }}>{c.title}</span>
                           <span style={{ fontSize: 12, color: t.muted }}>
-                            <strong style={{ color: t.text, fontWeight: 600 }}>{c.count}</strong> · {c.hint}
+                            <strong style={{ color: t.text, fontWeight: 700 }}>{c.count}</strong> · {c.hint}
                           </span>
                         </div>
                       </button>
@@ -1021,7 +1027,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </div>
                 </section>
 
-                {/* Botón Principal: Agregar Nuevo Himno */}
+                {/* Botón Destacado: Agregar Himno */}
                 <section>
                   <button
                     type="button"
@@ -1038,7 +1044,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       border: '1px solid rgba(255,255,255,0.12)',
                       background: `linear-gradient(135deg, ${t.accent} 0%, #c9623a 100%)`,
                       color: '#fff',
-                      fontWeight: 600,
+                      fontWeight: 700,
                       fontSize: 15,
                       cursor: 'pointer',
                       boxShadow: `0 14px 30px rgba(224,122,79,0.28)`,
@@ -1060,7 +1066,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </button>
                 </section>
 
-                {/* Recientes / Favoritos Funcionales */}
+                {/* Últimos Cantados / Favoritos */}
                 <section aria-labelledby="recent">
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                     <div role="tablist" style={{ display: 'flex', gap: 4, background: t.surface, border: `1px solid ${t.border}`, borderRadius: 999, padding: 4 }}>
@@ -1078,7 +1084,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           background: tab === 'recent' ? t.accentSoft : 'transparent',
                           color: tab === 'recent' ? t.accent : t.muted,
                           fontSize: 12.5,
-                          fontWeight: 600,
+                          fontWeight: 700,
                           cursor: 'pointer'
                         }}
                       >
@@ -1099,7 +1105,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           background: tab === 'fav' ? t.accentSoft : 'transparent',
                           color: tab === 'fav' ? t.accent : t.muted,
                           fontSize: 12.5,
-                          fontWeight: 600,
+                          fontWeight: 700,
                           cursor: 'pointer'
                         }}
                       >
@@ -1109,7 +1115,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                     </div>
                   </div>
 
-                  <div className="cn-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -18px', padding: '2px 18px 6px' }}>
+                  <div className="cn-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '4px 20px 8px' }}>
                     {listTab.map((s) => (
                       <button
                         key={s.id}
@@ -1132,14 +1138,14 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ color: t.accent, fontWeight: 700, fontSize: 13 }}>
+                          <span style={{ color: t.accent, fontWeight: 800, fontSize: 13 }}>
                             {formatearEtiqueta(s) || '✨'}
                           </span>
-                          <span style={{ fontSize: 11, color: t.faint }}>{tab === 'recent' ? 'Reciente' : '★'}</span>
+                          <span style={{ fontSize: 11, color: t.faint, fontWeight: 600 }}>{tab === 'recent' ? 'Reciente' : '★'}</span>
                         </div>
                         <span style={{
                           fontSize: 14,
-                          fontWeight: 500,
+                          fontWeight: 600,
                           lineHeight: 1.35,
                           minHeight: 38,
                           display: '-webkit-box',
@@ -1150,7 +1156,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           {s.titulo}
                         </span>
                         <span style={{ fontSize: 11, color: t.muted, display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span style={{ width: 22, height: 22, borderRadius: 6, display: 'grid', placeItems: 'center', background: t.surface2, border: `1px solid ${t.border}`, color: t.text, fontWeight: 600, fontSize: 11 }}>
+                          <span style={{ width: 22, height: 22, borderRadius: 6, display: 'grid', placeItems: 'center', background: t.surface2, border: `1px solid ${t.border}`, color: t.text, fontWeight: 700, fontSize: 11 }}>
                             {s.tonoBase}
                           </span>
                           Tono
@@ -1160,8 +1166,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </div>
                 </section>
 
-                {/* Footer */}
-                <footer style={{ marginTop: 'auto', padding: '18px 0 28px', textAlign: 'center', fontSize: 12, color: t.faint }}>
+                {/* Footer con margen para no pegarse */}
+                <footer style={{ marginTop: 'auto', padding: '16px 0 28px', textAlign: 'center', fontSize: 12, color: t.faint }}>
                   Jesús es el Señor <span style={{ color: t.accent }}>•</span> Cifra NASA v1.0
                 </footer>
               </>
@@ -1242,7 +1248,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                 <button onClick={() => setFontIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))} disabled={fontIdx === FONT_SIZES.length - 1} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: t.text, cursor: 'pointer', fontSize: '13px', fontWeight: '800', opacity: fontIdx === FONT_SIZES.length - 1 ? 0.3 : 1 }}>A+</button>
               </div>
 
-              {/* Toggle Tema Claro / Oscuro */}
+              {/* Toggle Tema */}
               <button
                 onClick={() => setModoOscuro(!modoOscuro)}
                 style={{ background: t.surface2, border: 'none', color: t.text, width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}
@@ -1263,7 +1269,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
           {/* Área de Lectura Scrollable */}
           <div ref={scrollRef} className="cn-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px' }}>
             
-            {/* Header del Himno para Pantalla y PDF */}
+            {/* Header del Himno */}
             <section className="header-himno-pdf" style={{ margin: '12px 16px 0', background: t.surface, border: `1px solid ${t.border}`, borderRadius: '16px', padding: '16px 18px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: t.text }}>
@@ -1306,7 +1312,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             </div>
           </div>
 
-          {/* Barra Flotante de Auto-Scroll Manos Libres */}
+          {/* Barra Flotante de Auto-Scroll */}
           <div className="no-imprimir" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'center', padding: '0 16px 16px', zIndex: 30 }}>
             <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: modoOscuro ? 'rgba(17,26,46,0.92)' : 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', boxShadow: `0 8px 30px rgba(0,0,0,0.25), inset 0 0 0 1px ${t.border}`, borderRadius: '999px', padding: '6px 12px 6px 6px' }}>
               <button
