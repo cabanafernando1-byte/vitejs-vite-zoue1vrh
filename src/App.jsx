@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// Tipografía Lexend para la interfaz del cancionero
+// Tipografía Lexend
 const linkFonts = document.createElement('link');
 linkFonts.rel = 'stylesheet';
 linkFonts.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap';
@@ -9,42 +9,39 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* LOGO OFICIAL 100% IDÉNTICO DIRECTO DE CANVA                                */
+/* Logo Oficial Canva                                                        */
 /* -------------------------------------------------------------------------- */
 const LogoOficialCanva = () => (
-  <div style={{
-    width: '100%',
-    maxWidth: '320px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '10px'
-  }}>
+  <div style={{ width: '100%', maxWidth: '280px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
     <img
       src="/logo.png"
-      alt="Nasa Cifras - Jesús es el Señor"
-      style={{
-        width: '100%',
-        height: 'auto',
-        objectFit: 'contain',
-        display: 'block',
-        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.4))'
+      alt="Nasa Cifras"
+      onError={(e) => {
+        // Fallback visual si la imagen aún no está en /public/logo.png
+        e.currentTarget.style.display = 'none';
+        e.currentTarget.nextElementSibling.style.display = 'flex';
       }}
+      style={{ width: '100%', height: 'auto', objectFit: 'contain', display: 'block' }}
     />
+    <div style={{ display: 'none', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+      <span style={{ fontSize: '42px', fontWeight: '800', color: '#e07a4f', letterSpacing: '2px' }}>NASA</span>
+      <span style={{ fontSize: '24px', fontWeight: '900', color: '#f4f6fb', letterSpacing: '4px' }}>CIFRAS</span>
+      <span style={{ fontSize: '12px', fontWeight: '700', color: '#fcd34d', letterSpacing: '2px', marginTop: '6px' }}>JESÚS ES EL SEÑOR</span>
+    </div>
   </div>
 );
 
 /* -------------------------------------------------------------------------- */
-/* Iconos SVG Auxiliares                                                     */
+/* Iconos Auxiliares SVG                                                     */
 /* -------------------------------------------------------------------------- */
-function Icon({ name, size = 20 }) {
+function Icon({ name, size = 18 }) {
   const common = {
     width: size,
     height: size,
     viewBox: '0 0 24 24',
     fill: 'none',
     stroke: 'currentColor',
-    strokeWidth: 1.8,
+    strokeWidth: 2,
     strokeLinecap: 'round',
     strokeLinejoin: 'round',
     'aria-hidden': true,
@@ -65,11 +62,11 @@ function Icon({ name, size = 20 }) {
       return (
         <svg {...common}>
           <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
+          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
         </svg>
       );
     case 'plus':
-      return <svg {...common} strokeWidth={2.2}><path d="M12 5v14M5 12h14" /></svg>;
+      return <svg {...common} strokeWidth={2.4}><path d="M12 5v14M5 12h14" /></svg>;
     case 'stack':
       return <svg {...common}><path d="M4 7.5 12 4l8 3.5-8 3.5-8-3.5Z" /><path d="m4 12 8 3.5 8-3.5M4 16.5 12 20l8-3.5" /></svg>;
     case 'layers':
@@ -88,7 +85,7 @@ function Icon({ name, size = 20 }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Música y Transposición                                                    */
+/* Teoría Musical y Acordes                                                  */
 /* -------------------------------------------------------------------------- */
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const FLAT_TO_SHARP = { Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#' };
@@ -155,7 +152,7 @@ function calcularDiagramaAcorde(nombreAcorde) {
   if (tipo === "7") {
     let t6 = (semitonoRaiz - 4 + 12) % 12;
     if (t6 >= 1 && t6 <= 8) {
-      return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6, t6, t6] };
+      return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6, t6 + 1, t6, t6] };
     }
     let t5 = (semitonoRaiz - 9 + 12) % 12;
     return { baseFret: t5, barre: { fret: t5, from: 1, to: 5 }, frets: [-1, t5, t5 + 2, t5, t5 + 2, t5] };
@@ -170,7 +167,7 @@ function calcularDiagramaAcorde(nombreAcorde) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Diagrama de Acorde con Tipografía Lexend                                  */
+/* Diagramas de Acordes                                                      */
 /* -------------------------------------------------------------------------- */
 const STRINGS = 6;
 const FRETS = 4;
@@ -188,20 +185,18 @@ function DiagramaAcordeLexend({ name, tema }) {
   const baseFret = shape.baseFret || 1;
 
   return (
-    <figure
-      style={{
-        background: tema.surface,
-        boxShadow: `inset 0 0 0 1px ${tema.border}`,
-        borderRadius: '12px',
-        width: '76px',
-        padding: '6px 4px 8px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        flexShrink: 0,
-        margin: 0
-      }}
-    >
+    <figure style={{
+      background: tema.surface,
+      boxShadow: `inset 0 0 0 1px ${tema.border}`,
+      borderRadius: '12px',
+      width: '76px',
+      padding: '6px 4px 8px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      flexShrink: 0,
+      margin: 0
+    }}>
       <figcaption style={{ fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '700', color: tema.accent, marginBottom: '2px' }}>
         {name}
       </figcaption>
@@ -339,13 +334,11 @@ export default function App() {
   const [ocultarSplash, setOcultarSplash] = useState(false);
   const [vistaActual, setVistaActual] = useState('menu');
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
-  const [modoOscuro, setModoOscuro] = useState(true);
+  const [modoOscuro, setModoOscuro] = useState(false);
   const [semitonos, setSemitonos] = useState(0);
   const [fontIdx, setFontIdx] = useState(1);
   const [scrolling, setScrolling] = useState(false);
   const [speed, setSpeed] = useState(1);
-
-  // Estados del Menú
   const [query, setQuery] = useState('');
   const [tab, setTab] = useState('recent');
 
@@ -362,37 +355,37 @@ export default function App() {
 
   const scrollRef = useRef(null);
 
-  // Paleta oficial V0
+  // Paleta oficial
   const t = modoOscuro ? {
     bg: '#0b1120',
     surface: '#111a2e',
     surface2: '#16213a',
     border: 'rgba(255,255,255,0.08)',
-    borderStrong: 'rgba(255,255,255,0.14)',
+    borderStrong: 'rgba(255,255,255,0.16)',
     text: '#f4f6fb',
     muted: '#8a94ad',
     faint: '#5b6480',
     accent: '#e07a4f',
     accentSoft: 'rgba(224,122,79,0.14)',
     onAccent: '#1a0d07',
-    shadow: '0 18px 40px rgba(0,0,0,0.45)',
+    shadow: '0 8px 24px rgba(0,0,0,0.3)',
   } : {
-    bg: '#f6f4f0',
+    bg: '#fbf9f6',
     surface: '#ffffff',
-    surface2: '#f0ede7',
+    surface2: '#f3eee8',
     border: 'rgba(11,17,32,0.08)',
     borderStrong: 'rgba(11,17,32,0.16)',
     text: '#0b1120',
-    muted: '#5b6480',
+    muted: '#606b85',
     faint: '#9aa2b8',
     accent: '#d46a3f',
     accentSoft: 'rgba(212,106,63,0.12)',
     onAccent: '#ffffff',
-    shadow: '0 18px 40px rgba(11,17,32,0.10)',
+    shadow: '0 4px 20px rgba(11,17,32,0.06)',
   };
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_nasa_v22');
+    const local = localStorage.getItem('cifra_nasa_v25');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -490,16 +483,15 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const [recientes, setRecientes] = useState([himnos[0], himnos[1]]);
   const [favoritos, setFavoritos] = useState([himnos[0]]);
 
-  // Splash de bienvenida de 2.4s
   useEffect(() => {
     const splashTimer = setTimeout(() => {
       setOcultarSplash(true);
-    }, 2400);
+    }, 2200);
     return () => clearTimeout(splashTimer);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_nasa_v22', JSON.stringify(himnos));
+    localStorage.setItem('cifra_nasa_v25', JSON.stringify(himnos));
   }, [himnos]);
 
   // Auto-scroll loop
@@ -637,53 +629,30 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const listTab = tab === 'recent' ? recientes : favoritos;
 
   return (
-    <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: t.bg, color: t.text, transition: 'background 0.3s ease, color 0.3s ease' }}>
+    <div style={{ minHeight: '100dvh', fontFamily: "'Lexend', sans-serif", backgroundColor: t.bg, color: t.text, transition: 'background 0.25s ease, color 0.25s ease', display: 'flex', flexDirection: 'column' }}>
       
       <style>{`
-        @keyframes animLogoEntrada {
-          0% { opacity: 0; transform: scale(0.92); filter: blur(4px); }
-          100% { opacity: 1; transform: scale(1); filter: blur(0); }
-        }
-        @keyframes fadeOutSplash {
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; min-height: 100%; }
+        @keyframes animFadeOut {
           0% { opacity: 1; transform: scale(1); }
-          100% { opacity: 0; transform: scale(1.04); }
+          100% { opacity: 0; transform: scale(1.03); }
         }
-        
-        .cn-root * { box-sizing: border-box; }
-        .cn-scroll { scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory; }
+        .cn-scroll { scrollbar-width: none; -ms-overflow-style: none; }
         .cn-scroll::-webkit-scrollbar { display: none; }
-        .cn-press { transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; border: none; font-family: inherit; }
+        .cn-press { transition: transform 0.15s ease, opacity 0.15s ease; cursor: pointer; border: none; font-family: inherit; }
         .cn-press:active { transform: scale(0.97); }
-        .cn-root input { font-family: inherit; }
-        .cn-root input::placeholder { color: ${t.faint}; }
-        .cn-card:hover { border-color: ${t.borderStrong} !important; }
 
         @media print {
           @page { size: A4 portrait; margin: 14mm 16mm; }
-          body, html {
-            background: #ffffff !important;
-            color: #000000 !important;
-            font-family: 'Lexend', sans-serif !important;
-            -webkit-print-color-adjust: exact;
-          }
+          body, html { background: #ffffff !important; color: #000000 !important; font-family: 'Lexend', sans-serif !important; }
           .no-imprimir { display: none !important; }
           .contenedor-visor { max-width: 100% !important; height: auto !important; padding: 0 !important; margin: 0 !important; }
-          .header-himno-pdf {
-            text-align: center !important;
-            margin-bottom: 20px !important;
-            padding-bottom: 12px !important;
-            border-bottom: 2px solid #e2e8f0 !important;
-          }
+          .header-himno-pdf { text-align: center !important; margin-bottom: 20px !important; padding-bottom: 12px !important; border-bottom: 2px solid #e2e8f0 !important; }
           .header-himno-pdf h1 { font-size: 24pt !important; font-weight: 800 !important; color: #000000 !important; margin: 0 0 6px 0 !important; }
           .header-himno-pdf p { font-size: 11pt !important; color: #475569 !important; margin: 0 0 10px 0 !important; }
           .header-himno-pdf .meta { display: flex !important; justify-content: center !important; gap: 20px !important; font-size: 10pt !important; font-weight: 700 !important; color: #334155 !important; }
-          .layout-partitura-pdf {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: flex-start !important;
-            gap: 24px !important;
-          }
+          .layout-partitura-pdf { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: flex-start !important; gap: 24px !important; }
           .area-partitura { flex: 1 !important; padding: 0 !important; font-size: 13pt !important; line-height: 1.5 !important; }
           .area-partitura * { color: #000000 !important; }
           .carrusel-acordes { width: 86px !important; display: flex !important; flex-direction: column !important; gap: 14px !important; margin: 0 !important; padding: 0 !important; }
@@ -693,7 +662,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
         }
       `}</style>
 
-      {/* PANTALLA SPLASH CON EL LOGO EXACTO DE CANVA */}
+      {/* PANTALLA SPLASH */}
       {!ocultarSplash && (
         <div style={{
           position: 'fixed',
@@ -704,65 +673,60 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
           justifyContent: 'center',
           zIndex: 9999,
           padding: '24px',
-          animation: 'fadeOutSplash 0.5s ease 1.9s forwards'
+          animation: 'animFadeOut 0.45s ease 1.75s forwards'
         }}>
-          <div style={{ animation: 'animLogoEntrada 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-            <LogoOficialCanva />
-          </div>
+          <LogoOficialCanva />
         </div>
       )}
 
-      {/* MENÚ PRINCIPAL */}
+      {/* MENÚ PRINCIPAL TOTALMENTE FLUIDO Y AJUSTADO */}
       {vistaActual === 'menu' && (
-        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
+        <div style={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', overflowY: 'auto' }}>
           <div style={{
             width: '100%',
             maxWidth: 440,
-            minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
-            padding: 'max(24px, env(safe-area-inset-top)) 20px max(32px, env(safe-area-inset-bottom)) 20px',
-            gap: 20,
-            boxSizing: 'border-box'
+            padding: 'max(16px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px',
+            gap: 16
           }}>
             
             {/* Header del Menú */}
-            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 4 }}>
+            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{
                   background: t.accent,
                   color: t.onAccent,
                   fontWeight: 800,
-                  fontSize: 15,
-                  padding: '6px 12px',
+                  fontSize: 14,
+                  padding: '5px 12px',
                   borderRadius: 10,
                   lineHeight: 1,
-                  boxShadow: `0 6px 18px ${t.accentSoft}`,
+                  boxShadow: `0 4px 14px ${t.accentSoft}`,
                 }}>
                   Cifra
                 </span>
-                <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: '0.04em', lineHeight: 1 }}>NASA</span>
+                <span style={{ fontWeight: 800, fontSize: 20, letterSpacing: '0.04em', lineHeight: 1 }}>NASA</span>
               </div>
 
-              <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
                 <button
                   type="button"
                   className="cn-press"
                   onClick={() => setModoOscuro(!modoOscuro)}
                   aria-label="Cambiar tema"
                   style={{
-                    width: 42,
-                    height: 42,
+                    width: 38,
+                    height: 38,
                     borderRadius: 999,
                     border: `1px solid ${t.border}`,
                     background: t.surface,
                     color: t.text,
                     display: 'grid',
                     placeItems: 'center',
-                    cursor: 'pointer'
                   }}
                 >
-                  <Icon name={modoOscuro ? 'moon' : 'sun'} size={19} />
+                  <Icon name={modoOscuro ? 'moon' : 'sun'} size={18} />
                 </button>
                 <button
                   type="button"
@@ -770,18 +734,17 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   aria-label="Ajustes"
                   onClick={() => setVistaActual('categorias')}
                   style={{
-                    width: 42,
-                    height: 42,
+                    width: 38,
+                    height: 38,
                     borderRadius: 999,
                     border: `1px solid ${t.border}`,
                     background: t.surface,
                     color: t.text,
                     display: 'grid',
                     placeItems: 'center',
-                    cursor: 'pointer'
                   }}
                 >
-                  <Icon name="settings" size={19} />
+                  <Icon name="settings" size={18} />
                 </button>
               </div>
             </header>
@@ -791,15 +754,15 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
               <label style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 12,
+                gap: 10,
                 background: t.surface,
                 border: `1px solid ${t.border}`,
                 borderRadius: 999,
-                padding: '14px 18px',
+                padding: '11px 16px',
                 color: t.muted,
                 boxShadow: t.shadow
               }}>
-                <Icon name="search" size={20} />
+                <Icon name="search" size={18} />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -816,20 +779,20 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   }}
                 />
                 {query && (
-                  <span style={{ fontSize: 12, color: t.accent, fontWeight: 700 }}>
+                  <span style={{ fontSize: 11, color: t.accent, fontWeight: 700 }}>
                     {/^\d+$/.test(query) ? `Nº ${query}` : 'Título'}
                   </span>
                 )}
               </label>
 
-              {/* Resultados de búsqueda */}
+              {/* Resultados en vivo */}
               {query.trim() !== '' && (
-                <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {himnosFiltrados.map(h => (
                     <div
                       key={h.id}
                       onClick={() => { setQuery(''); seleccionarHimno(h); }}
-                      style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 12, padding: '12px 14px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 12, padding: '11px 14px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         {formatearEtiqueta(h) && <span style={{ color: t.accent, fontWeight: 700, fontSize: 13 }}>{formatearEtiqueta(h)}</span>}
@@ -839,7 +802,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                     </div>
                   ))}
                   {himnosFiltrados.length === 0 && (
-                    <div style={{ padding: '14px', textAlign: 'center', fontSize: 13, color: t.muted }}>
+                    <div style={{ padding: '12px', textAlign: 'center', fontSize: 13, color: t.muted }}>
                       No se encontraron cánticos
                     </div>
                   )}
@@ -851,61 +814,61 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             {query.trim() === '' && (
               <>
                 <section aria-labelledby="cats">
-                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <h2 id="cats" style={{ margin: 0, fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: t.muted }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <h2 id="cats" style={{ margin: 0, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: t.muted }}>
                       Categorías
                     </h2>
-                    <span style={{ fontSize: 12, color: t.faint, fontWeight: 600 }}>{himnos.length} cantos</span>
+                    <span style={{ fontSize: 11, color: t.faint, fontWeight: 600 }}>{himnos.length} cantos</span>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     {CATEGORIES.map((c) => (
                       <button
                         key={c.key}
                         type="button"
-                        className="cn-press cn-card"
+                        className="cn-press"
                         onClick={() => { setCategoriaSel(c.key); setVistaActual('lista'); }}
                         style={{
                           background: t.surface,
                           border: `1px solid ${t.border}`,
-                          borderRadius: 18,
+                          borderRadius: 16,
                           color: t.text,
                           textAlign: 'left',
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: 16,
-                          padding: 16,
-                          minHeight: 138,
+                          gap: 12,
+                          padding: '13px 14px',
+                          boxShadow: t.shadow
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                           <span style={{
-                            width: 44,
-                            height: 44,
-                            borderRadius: 14,
+                            width: 38,
+                            height: 38,
+                            borderRadius: 12,
                             display: 'grid',
                             placeItems: 'center',
                             background: t.accentSoft,
                             color: t.accent,
                           }}>
-                            <Icon name={c.icon} size={22} />
+                            <Icon name={c.icon} size={20} />
                           </span>
                           <span style={{
-                            fontSize: 11,
+                            fontSize: 10,
                             fontWeight: 700,
                             letterSpacing: '0.06em',
                             color: c.icon === 'sparkle' ? t.accent : t.muted,
                             border: `1px solid ${t.border}`,
-                            borderRadius: 8,
-                            padding: '4px 7px',
+                            borderRadius: 6,
+                            padding: '3px 6px',
                             background: t.surface2,
                             lineHeight: 1,
                           }}>
                             {c.badge}
                           </span>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                          <span style={{ fontWeight: 700, fontSize: 15 }}>{c.title}</span>
-                          <span style={{ fontSize: 12, color: t.muted }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                          <span style={{ fontWeight: 700, fontSize: 14 }}>{c.title}</span>
+                          <span style={{ fontSize: 11, color: t.muted }}>
                             <strong style={{ color: t.text, fontWeight: 700 }}>{c.count}</strong> · {c.hint}
                           </span>
                         </div>
@@ -914,7 +877,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </div>
                 </section>
 
-                {/* Botón Principal: Agregar Himno */}
+                {/* Botón Principal: Agregar Himno (Ajustado para no desbordar) */}
                 <section>
                   <button
                     type="button"
@@ -925,37 +888,37 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: 10,
-                      padding: '17px 20px',
-                      borderRadius: 18,
+                      gap: 8,
+                      padding: '13px 16px',
+                      borderRadius: 14,
                       border: '1px solid rgba(255,255,255,0.12)',
                       background: `linear-gradient(135deg, ${t.accent} 0%, #c9623a 100%)`,
                       color: '#fff',
                       fontWeight: 700,
-                      fontSize: 15,
-                      boxShadow: `0 14px 30px rgba(224,122,79,0.28)`,
+                      fontSize: 14,
+                      boxShadow: `0 8px 20px rgba(224,122,79,0.25)`,
                       fontFamily: "'Lexend', sans-serif"
                     }}
                   >
                     <span style={{
-                      width: 28,
-                      height: 28,
+                      width: 24,
+                      height: 24,
                       borderRadius: 999,
                       display: 'grid',
                       placeItems: 'center',
-                      background: 'rgba(255,255,255,0.18)',
+                      background: 'rgba(255,255,255,0.2)',
                     }}>
-                      <Icon name="plus" size={16} />
+                      <Icon name="plus" size={14} />
                     </span>
-                    Agregar Nuevo Himno
-                    <span style={{ fontWeight: 400, opacity: 0.85, fontSize: 13 }}>(ChordPro)</span>
+                    <span>Agregar Nuevo Himno</span>
+                    <span style={{ fontWeight: 400, opacity: 0.85, fontSize: 12 }}>(ChordPro)</span>
                   </button>
                 </section>
 
                 {/* Últimos Cantados / Favoritos */}
                 <section aria-labelledby="recent">
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <div role="tablist" style={{ display: 'flex', gap: 4, background: t.surface, border: `1px solid ${t.border}`, borderRadius: 999, padding: 4 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <div role="tablist" style={{ display: 'flex', gap: 4, background: t.surface, border: `1px solid ${t.border}`, borderRadius: 999, padding: 3 }}>
                       <button
                         type="button"
                         onClick={() => setTab('recent')}
@@ -963,17 +926,16 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 6,
-                          padding: '7px 12px',
+                          gap: 5,
+                          padding: '6px 10px',
                           borderRadius: 999,
-                          border: 'none',
                           background: tab === 'recent' ? t.accentSoft : 'transparent',
                           color: tab === 'recent' ? t.accent : t.muted,
-                          fontSize: 12.5,
+                          fontSize: 12,
                           fontWeight: 700,
                         }}
                       >
-                        <Icon name="clock" size={14} />
+                        <Icon name="clock" size={13} />
                         Últimos cantados
                       </button>
                       <button
@@ -983,54 +945,54 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 6,
-                          padding: '7px 12px',
+                          gap: 5,
+                          padding: '6px 10px',
                           borderRadius: 999,
-                          border: 'none',
                           background: tab === 'fav' ? t.accentSoft : 'transparent',
                           color: tab === 'fav' ? t.accent : t.muted,
-                          fontSize: 12.5,
+                          fontSize: 12,
                           fontWeight: 700,
                         }}
                       >
-                        <Icon name="heart" size={14} />
+                        <Icon name="heart" size={13} />
                         Favoritos
                       </button>
                     </div>
                   </div>
 
-                  <div className="cn-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '4px 20px 8px' }}>
+                  <div className="cn-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -18px', padding: '2px 18px 6px' }}>
                     {listTab.map((s) => (
                       <button
                         key={s.id}
                         type="button"
-                        className="cn-press cn-card"
+                        className="cn-press"
                         onClick={() => seleccionarHimno(s)}
                         style={{
                           background: t.surface,
                           border: `1px solid ${t.border}`,
-                          borderRadius: 18,
+                          borderRadius: 14,
                           color: t.text,
                           flex: '0 0 auto',
-                          width: 168,
-                          padding: 14,
+                          width: 155,
+                          padding: '11px 12px',
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: 10,
+                          gap: 8,
                           textAlign: 'left',
+                          boxShadow: t.shadow
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ color: t.accent, fontWeight: 800, fontSize: 13 }}>
+                          <span style={{ color: t.accent, fontWeight: 800, fontSize: 12 }}>
                             {formatearEtiqueta(s) || '✨'}
                           </span>
-                          <span style={{ fontSize: 11, color: t.faint, fontWeight: 600 }}>{tab === 'recent' ? 'Reciente' : '★'}</span>
+                          <span style={{ fontSize: 10, color: t.faint, fontWeight: 600 }}>{tab === 'recent' ? 'Reciente' : '★'}</span>
                         </div>
                         <span style={{
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: 600,
-                          lineHeight: 1.35,
-                          minHeight: 38,
+                          lineHeight: 1.3,
+                          minHeight: 34,
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: 'vertical',
@@ -1038,8 +1000,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                         }}>
                           {s.titulo}
                         </span>
-                        <span style={{ fontSize: 11, color: t.muted, display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span style={{ width: 22, height: 22, borderRadius: 6, display: 'grid', placeItems: 'center', background: t.surface2, border: `1px solid ${t.border}`, color: t.text, fontWeight: 700, fontSize: 11 }}>
+                        <span style={{ fontSize: 11, color: t.muted, display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <span style={{ width: 20, height: 20, borderRadius: 5, display: 'grid', placeItems: 'center', background: t.surface2, border: `1px solid ${t.border}`, color: t.text, fontWeight: 700, fontSize: 10 }}>
                             {s.tonoBase}
                           </span>
                           Tono
@@ -1050,7 +1012,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                 </section>
 
                 {/* Footer */}
-                <footer style={{ marginTop: 'auto', padding: '16px 0 28px', textAlign: 'center', fontSize: 12, color: t.faint }}>
+                <footer style={{ marginTop: 'auto', padding: '12px 0 16px', textAlign: 'center', fontSize: 11, color: t.faint }}>
                   Jesús es el Señor <span style={{ color: t.accent }}>•</span> Cifra NASA v1.0
                 </footer>
               </>
@@ -1062,17 +1024,17 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* CATEGORÍAS */}
       {vistaActual === 'categorias' && (
-        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px', boxSizing: 'border-box' }}>
+        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px', width: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>Categorías</h2>
-            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', fontFamily: "'Lexend', sans-serif" }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {["Suplementarios", "Complementarios", "Himnos", "Nuevos"].map(cat => (
               <button
                 key={cat}
                 onClick={() => { setCategoriaSel(cat); setVistaActual('lista'); }}
-                style={{ backgroundColor: t.surface, border: `1px solid ${t.border}`, color: t.text, padding: '16px', borderRadius: '12px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '15px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                style={{ backgroundColor: t.surface, border: `1px solid ${t.border}`, color: t.text, padding: '15px', borderRadius: '12px', textAlign: 'left', cursor: 'pointer', fontFamily: "'Lexend', sans-serif", fontSize: '15px', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
                 <span>{cat}</span>
                 <span style={{ color: t.accent, fontWeight: 'bold' }}>→</span>
@@ -1084,10 +1046,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* LISTA DE HIMNOS */}
       {vistaActual === 'lista' && (
-        <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px', boxSizing: 'border-box' }}>
+        <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px', width: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
-            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', fontFamily: "'Lexend', sans-serif" }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {himnos.filter(h => h.categoria === categoriaSel).map(h => {
@@ -1096,10 +1058,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                 <div
                   key={h.id}
                   onClick={() => seleccionarHimno(h)}
-                  style={{ backgroundColor: t.surface, border: `1px solid ${t.border}`, padding: '14px 16px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
+                  style={{ backgroundColor: t.surface, border: `1px solid ${t.border}`, padding: '13px 15px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                 >
-                  {prefijo && <span style={{ fontWeight: '800', color: t.accent, fontSize: '15px' }}>{prefijo}</span>}
-                  <div style={{ fontWeight: '600', fontSize: '15px' }}>{h.titulo}</div>
+                  {prefijo && <span style={{ fontWeight: '800', color: t.accent, fontSize: '14px' }}>{prefijo}</span>}
+                  <div style={{ fontWeight: '600', fontSize: '14px' }}>{h.titulo}</div>
                 </div>
               );
             })}
@@ -1109,10 +1071,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* VISOR DE PARTITURA */}
       {vistaActual === 'visor' && (
-        <div className="contenedor-visor" style={{ height: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '520px', margin: '0 auto', position: 'relative' }}>
+        <div className="contenedor-visor" style={{ height: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: '520px', margin: '0 auto', position: 'relative', width: '100%' }}>
           
           {/* Barra Superior */}
-          <header className="no-imprimir" style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', backdropFilter: 'blur(12px)', background: modoOscuro ? 'rgba(11, 17, 32, 0.92)' : 'rgba(246, 244, 240, 0.92)', borderBottom: `1px solid ${t.border}` }}>
+          <header className="no-imprimir" style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', backdropFilter: 'blur(12px)', background: modoOscuro ? 'rgba(11, 17, 32, 0.92)' : 'rgba(251, 249, 246, 0.92)', borderBottom: `1px solid ${t.border}` }}>
             <button onClick={navegarAtras} style={{ background: 'transparent', border: 'none', color: t.text, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
@@ -1150,24 +1112,24 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
           </header>
 
           {/* Área de Lectura */}
-          <div ref={scrollRef} className="cn-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px' }}>
+          <div ref={scrollRef} className="cn-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '110px' }}>
             
             {/* Header del Himno */}
-            <section className="header-himno-pdf" style={{ margin: '12px 16px 0', background: t.surface, border: `1px solid ${t.border}`, borderRadius: '16px', padding: '16px 18px' }}>
+            <section className="header-himno-pdf" style={{ margin: '12px 14px 0', background: t.surface, border: `1px solid ${t.border}`, borderRadius: '16px', padding: '14px 16px', boxShadow: t.shadow }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: t.text }}>
+                <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: t.text }}>
                   {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
                 </h1>
-                <span style={{ background: t.accentSoft, color: t.accent, padding: '3px 10px', borderRadius: '6px', fontFamily: "'Lexend', sans-serif", fontSize: '13px', fontWeight: '800' }}>
+                <span style={{ background: t.accentSoft, color: t.accent, padding: '3px 8px', borderRadius: '6px', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '800' }}>
                   {tonoActual}
                 </span>
               </div>
               {himnoActivo.autor && (
-                <p style={{ margin: '4px 0 0', fontSize: '13px', color: t.muted }}>{himnoActivo.autor}</p>
+                <p style={{ margin: '4px 0 0', fontSize: '12px', color: t.muted }}>{himnoActivo.autor}</p>
               )}
-              <div className="meta" style={{ marginTop: '10px', display: 'flex', gap: '10px', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '600' }}>
-                <span style={{ border: `1px solid ${t.border}`, padding: '2px 8px', borderRadius: '6px', color: t.text }}>[{himnoActivo.compas || '4/4'}]</span>
-                <span style={{ border: `1px solid ${t.border}`, padding: '2px 8px', borderRadius: '6px', color: t.text }}>[{himnoActivo.bpm ? `${himnoActivo.bpm} bpm` : '120 bpm'}]</span>
+              <div className="meta" style={{ marginTop: '8px', display: 'flex', gap: '8px', fontFamily: "'Lexend', sans-serif", fontSize: '11px', fontWeight: '600' }}>
+                <span style={{ border: `1px solid ${t.border}`, padding: '2px 6px', borderRadius: '4px', color: t.text }}>[{himnoActivo.compas || '4/4'}]</span>
+                <span style={{ border: `1px solid ${t.border}`, padding: '2px 6px', borderRadius: '4px', color: t.text }}>[{himnoActivo.bpm ? `${himnoActivo.bpm} bpm` : '120 bpm'}]</span>
               </div>
             </section>
 
@@ -1175,8 +1137,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             <div className="layout-partitura-pdf">
               
               {/* Carrusel de Acordes */}
-              <section className="carrusel-acordes" aria-label="Acordes del cántico" style={{ paddingTop: '10px' }}>
-                <ul className="cn-scroll" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '0 16px 6px', margin: 0, listStyle: 'none' }}>
+              <section className="carrusel-acordes" aria-label="Acordes del cántico" style={{ paddingTop: '8px' }}>
+                <ul className="cn-scroll" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '0 14px 4px', margin: 0, listStyle: 'none' }}>
                   {acordesDelHimno(himnoActivo.textoChordPro).map((chord, idx) => (
                     <li key={idx} style={{ flexShrink: 0 }}>
                       <DiagramaAcordeLexend name={transposeChord(chord, semitonos)} tema={t} />
@@ -1186,7 +1148,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
               </section>
 
               {/* Letra del Himno */}
-              <article className="area-partitura" style={{ padding: '16px 18px 0', fontSize: `${FONT_SIZES[fontIdx]}px` }}>
+              <article className="area-partitura" style={{ padding: '14px 16px 0', fontSize: `${FONT_SIZES[fontIdx]}px` }}>
                 {himnoActivo.textoChordPro.split('\n').map((linea, idx) => (
                   <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} tema={t} />
                 ))}
@@ -1196,8 +1158,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
           </div>
 
           {/* Barra Flotante de Auto-Scroll */}
-          <div className="no-imprimir" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'center', padding: '0 16px 16px', zIndex: 30 }}>
-            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: modoOscuro ? 'rgba(17,26,46,0.92)' : 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', boxShadow: `0 8px 30px rgba(0,0,0,0.25), inset 0 0 0 1px ${t.border}`, borderRadius: '999px', padding: '6px 12px 6px 6px' }}>
+          <div className="no-imprimir" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'center', padding: '0 16px 14px', zIndex: 30 }}>
+            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: modoOscuro ? 'rgba(17,26,46,0.92)' : 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', boxShadow: `0 8px 30px rgba(0,0,0,0.18), inset 0 0 0 1px ${t.border}`, borderRadius: '999px', padding: '5px 10px 5px 5px' }}>
               <button
                 type="button"
                 onClick={() => setScrolling(s => !s)}
@@ -1206,8 +1168,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   alignItems: 'center',
                   gap: '6px',
                   borderRadius: '999px',
-                  padding: '8px 16px',
-                  fontSize: '13px',
+                  padding: '7px 14px',
+                  fontSize: '12px',
                   fontWeight: '700',
                   border: 'none',
                   cursor: 'pointer',
@@ -1226,8 +1188,8 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                     type="button"
                     onClick={() => setSpeed(s)}
                     style={{
-                      height: '28px',
-                      minWidth: '34px',
+                      height: '26px',
+                      minWidth: '32px',
                       borderRadius: '999px',
                       border: 'none',
                       cursor: 'pointer',
@@ -1250,21 +1212,21 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* FORMULARIO AGREGAR / EDITAR */}
       {vistaActual === 'formulario' && (
-        <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>
+        <main style={{ maxWidth: '480px', margin: '16px auto', padding: '0 16px', width: '100%' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <h2 style={{ fontSize: '17px', fontWeight: '800', margin: 0 }}>
               {idEditando ? '✏️ Editar Himno' : '➕ Agregar Nuevo Himno'}
             </h2>
-            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '5px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}>← Volver</button>
           </div>
 
-          <form onSubmit={guardarFormulario} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <form onSubmit={guardarFormulario} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Categoría:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Categoría:</label>
               <select
                 value={formCat}
                 onChange={e => setFormCat(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
+                style={{ width: '100%', padding: '9px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
               >
                 <option value="Suplementarios">Suplementarios (S-)</option>
                 <option value="Complementarios">Complementarios (C-)</option>
@@ -1275,56 +1237,56 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
             {formCat !== 'Nuevos' && (
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Número (solo dígitos):</label>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Número:</label>
                 <input
                   type="text"
                   placeholder="Ej: 53"
                   value={formNum}
                   onChange={e => setFormNum(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '9px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
                 />
               </div>
             )}
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Título del cántico:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Título del cántico:</label>
               <input
                 type="text"
-                placeholder="Nombre del cántico..."
+                placeholder="Nombre..."
                 value={formTitulo}
                 onChange={e => setFormTitulo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '9px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
               />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Compás:</label>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Compás:</label>
                 <input
                   type="text"
                   placeholder="4/4"
                   value={formCompas}
                   onChange={e => setFormCompas(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>BPM:</label>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>BPM:</label>
                 <input
                   type="text"
                   placeholder="132"
                   value={formBpm}
                   onChange={e => setFormBpm(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Tono:</label>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Tono:</label>
                 <select
                   value={formTono}
                   onChange={e => setFormTono(e.target.value)}
-                  style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
                 >
                   {NOTES.map(n => <option key={n} value={n}>{n}</option>)}
                   {["Dm", "Em", "Am", "Bm", "F#m", "Gm"].map(n => <option key={n} value={n}>{n}</option>)}
@@ -1333,31 +1295,31 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Autor(es) / Referencia:</label>
+              <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Autor(es):</label>
               <input
                 type="text"
                 placeholder="Ej: Hebert Faria / Samuel Huh"
                 value={formAutor}
                 onChange={e => setFormAutor(e.target.value)}
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '9px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif" }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: t.muted }}>Letra en formato ChordPro ([Acorde]Letra):</label>
+              <label style={{ fontSize: '11px', fontWeight: '700', color: t.muted }}>Letra ChordPro ([Acorde]Letra):</label>
               <textarea
-                rows="10"
+                rows="8"
                 placeholder="[Dm]Hay una nube que con[Bb]duce la iglesia..."
                 value={formCuerpo}
                 onChange={e => setFormCuerpo(e.target.value)}
                 required
-                style={{ width: '100%', padding: '10px', marginTop: '4px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", fontSize: '13px', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '9px', marginTop: '3px', borderRadius: '8px', border: `1px solid ${t.border}`, backgroundColor: t.surface, color: t.text, fontFamily: "'Lexend', sans-serif", fontSize: '13px' }}
               />
             </div>
 
             <button
               type="submit"
-              style={{ backgroundColor: t.accent, color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '800', cursor: 'pointer', fontSize: '14px', marginTop: '6px', fontFamily: "'Lexend', sans-serif" }}
+              style={{ backgroundColor: t.accent, color: '#fff', padding: '11px', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', fontSize: '13px', marginTop: '4px', fontFamily: "'Lexend', sans-serif" }}
             >
               {idEditando ? 'Guardar Cambios' : 'Guardar Himno'}
             </button>
