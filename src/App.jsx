@@ -8,7 +8,7 @@ if (!document.head.querySelector('link[href*="Lexend"]')) {
   document.head.appendChild(linkLexend);
 }
 
-// ILUSTRACIONES EXACTAS DE LOS TRES INSTRUMENTOS
+// Iconos vectoriales de la intro
 const IconoGuitarra = () => (
   <svg width="120" height="120" viewBox="0 0 512 512" fill="none">
     <path d="M430 40 L470 75 L415 130 L375 95 Z" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14" strokeLinejoin="round"/>
@@ -310,7 +310,7 @@ export default function App() {
   const [formCuerpo, setFormCuerpo] = useState('');
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_cancionero_v9');
+    const local = localStorage.getItem('cifra_cancionero_v10');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -407,7 +407,7 @@ CODA [2x]
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_cancionero_v9', JSON.stringify(himnos));
+    localStorage.setItem('cifra_cancionero_v10', JSON.stringify(himnos));
   }, [himnos]);
 
   const acordesDelHimno = (texto) => {
@@ -474,6 +474,16 @@ CODA [2x]
     setVistaActual('visor');
   };
 
+  const descargarPDF = () => {
+    const tituloPrevio = document.title;
+    const prefijo = formatearEtiqueta(himnoActivo);
+    document.title = prefijo ? `${prefijo} - ${himnoActivo.titulo}` : himnoActivo.titulo;
+    window.print();
+    setTimeout(() => {
+      document.title = tituloPrevio;
+    }, 1500);
+  };
+
   const navegarAtras = () => {
     if (vistaActual === 'visor') setVistaActual('lista');
     else if (vistaActual === 'lista') setVistaActual('categorias');
@@ -488,19 +498,55 @@ CODA [2x]
   return (
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: fondoApp, color: colorTexto }}>
       
+      {/* REGLAS DE IMPRESIÓN: ACORDES A LA DERECHA Y FONDO LIMPIO */}
       <style>{`
         @keyframes zoomPunto {
           0% { transform: scale(0.4); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
         }
         @media print {
-          body { background: #fff !important; color: #000 !important; }
-          .no-imprimir { display: none !important; }
-          .area-partitura { border: none !important; padding: 0 !important; box-shadow: none !important; }
+          body, html {
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-size: 13px !important;
+          }
+          .no-imprimir {
+            display: none !important;
+          }
+          .contenedor-visor {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .layout-partitura-pdf {
+            display: flex !important;
+            flex-direction: row-reverse !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+          }
+          .carrusel-acordes {
+            display: flex !important;
+            flex-direction: column !important;
+            flex-wrap: wrap !important;
+            width: 70px !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            gap: 12px !important;
+          }
+          .area-partitura {
+            flex: 1 !important;
+            border: none !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
+          }
         }
       `}</style>
 
-      {/* SPLASH ANIMATION CON LAS ILUSTRACIONES PRECISAS */}
+      {/* SPLASH ANIMATION */}
       {!ocultarSplash && (
         <div style={{
           position: 'fixed',
@@ -658,9 +704,9 @@ CODA [2x]
         </main>
       )}
 
-      {/* VISOR CON ACORDES MÓVILES EXACTOS Y PDF */}
+      {/* VISOR CON DISPOSICIÓN DUAL (APP ARRIBA / PDF DERECHA) */}
       {vistaActual === 'visor' && (
-        <div style={{ padding: '10px 12px 40px', maxWidth: '640px', margin: '0 auto' }}>
+        <div className="contenedor-visor" style={{ padding: '10px 12px 40px', maxWidth: '640px', margin: '0 auto' }}>
           
           <div className="no-imprimir" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -686,7 +732,7 @@ CODA [2x]
                 ✏️ Editar
               </button>
               <button
-                onClick={() => window.print()}
+                onClick={descargarPDF}
                 style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '700' }}
               >
                 📥 PDF
@@ -694,57 +740,62 @@ CODA [2x]
             </div>
           </div>
 
-          {/* Carrusel horizontal de acordes calculados */}
-          <div style={{
-            backgroundColor: fondoTarjeta,
-            border: `1px solid ${bordeColor}`,
-            borderRadius: '8px',
-            padding: '8px 10px',
-            marginBottom: '12px',
-            overflowX: 'auto',
-            display: 'flex',
-            gap: '8px',
-            justifyContent: 'flex-start'
-          }}>
-            {acordesDelHimno(himnoActivo.textoChordPro).map((ac, idx) => (
-              <GraficoAcorde
-                key={idx}
-                nombre={transponerAcorde(ac, semitonos)}
-                modoNoche={modoNocturno}
-              />
-            ))}
-          </div>
-
-          {/* Hoja de partitura */}
-          <main className="area-partitura" style={{
-            backgroundColor: fondoTarjeta,
-            border: `1px solid ${bordeColor}`,
-            padding: '24px 20px',
-            borderRadius: '8px',
-            textAlign: 'left'
-          }}>
-            <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-              <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: colorTexto }}>
-                {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
-              </h1>
-              {himnoActivo.autor && (
-                <div style={{ fontSize: '13px', fontWeight: '600', color: modoNocturno ? '#94a3b8' : '#64748b' }}>
-                  {himnoActivo.autor}
-                </div>
-              )}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', color: modoNocturno ? '#cbd5e1' : '#475569', borderBottom: `1px solid ${bordeColor}`, paddingBottom: '8px', marginBottom: '14px' }}>
-              <span>[{himnoActivo.compas || '4/4'}] [{himnoActivo.bpm ? `${himnoActivo.bpm}bpm` : '120bpm'}]</span>
-              <span>Tonalidad: {transponerAcorde(himnoActivo.tonoBase, semitonos)}</span>
-            </div>
-
-            <div>
-              {himnoActivo.textoChordPro.split('\n').map((linea, idx) => (
-                <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} />
+          {/* Envoltura flexible: en la app es vertical normal, en PDF se divide en columnas con acordes a la derecha */}
+          <div className="layout-partitura-pdf">
+            
+            {/* Carrusel de acordes (arriba en la pantalla, vertical a la derecha al imprimir) */}
+            <div className="carrusel-acordes" style={{
+              backgroundColor: fondoTarjeta,
+              border: `1px solid ${bordeColor}`,
+              borderRadius: '8px',
+              padding: '8px 10px',
+              marginBottom: '12px',
+              overflowX: 'auto',
+              display: 'flex',
+              gap: '8px',
+              justifyContent: 'flex-start'
+            }}>
+              {acordesDelHimno(himnoActivo.textoChordPro).map((ac, idx) => (
+                <GraficoAcorde
+                  key={idx}
+                  nombre={transponerAcorde(ac, semitonos)}
+                  modoNoche={modoNocturno}
+                />
               ))}
             </div>
-          </main>
+
+            {/* Hoja de partitura */}
+            <main className="area-partitura" style={{
+              backgroundColor: fondoTarjeta,
+              border: `1px solid ${bordeColor}`,
+              padding: '24px 20px',
+              borderRadius: '8px',
+              textAlign: 'left'
+            }}>
+              <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: colorTexto }}>
+                  {formatearEtiqueta(himnoActivo) ? `${formatearEtiqueta(himnoActivo)} ` : ''}{himnoActivo.titulo}
+                </h1>
+                {himnoActivo.autor && (
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: modoNocturno ? '#94a3b8' : '#64748b' }}>
+                    {himnoActivo.autor}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', color: modoNocturno ? '#cbd5e1' : '#475569', borderBottom: `1px solid ${bordeColor}`, paddingBottom: '8px', marginBottom: '14px' }}>
+                <span>[{himnoActivo.compas || '4/4'}] [{himnoActivo.bpm ? `${himnoActivo.bpm}bpm` : '120bpm'}]</span>
+                <span>Tonalidad: {transponerAcorde(himnoActivo.tonoBase, semitonos)}</span>
+              </div>
+
+              <div>
+                {himnoActivo.textoChordPro.split('\n').map((linea, idx) => (
+                  <RenderLineaChordPro key={idx} linea={linea} semitonos={semitonos} />
+                ))}
+              </div>
+            </main>
+
+          </div>
         </div>
       )}
 
