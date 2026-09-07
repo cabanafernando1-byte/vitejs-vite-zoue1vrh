@@ -1,75 +1,92 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// Tipografía Lexend de Google Fonts
-const linkLexend = document.createElement('link');
-linkLexend.rel = 'stylesheet';
-linkLexend.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap';
+// Tipografía Lexend para la interfaz del cancionero
+const linkFonts = document.createElement('link');
+linkFonts.rel = 'stylesheet';
+linkFonts.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap';
 if (!document.head.querySelector('link[href*="Lexend"]')) {
-  document.head.appendChild(linkLexend);
+  document.head.appendChild(linkFonts);
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Iconos de la Intro                                                        */
+/* LOGO VECTORIAL EXACTO DE CANVA (Nasa CIFRAS / JESÚS ES EL SEÑOR)          */
 /* -------------------------------------------------------------------------- */
-const IconoGuitarra = () => (
-  <svg width="120" height="120" viewBox="0 0 512 512" fill="none">
-    <path d="M430 40 L470 75 L415 130 L375 95 Z" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14" strokeLinejoin="round"/>
-    <path d="M400 110 L230 280 L200 250 L370 80 Z" fill="#e29578" stroke="#1e1e1e" strokeWidth="14" strokeLinejoin="round"/>
-    <path d="M220 230 C270 200 320 270 290 320 C320 370 270 440 180 470 C90 500 30 430 40 350 C50 270 120 220 180 270 Z" fill="#b4533c" stroke="#1e1e1e" strokeWidth="16" strokeLinejoin="round"/>
-    <circle cx="180" cy="330" r="40" fill="#588157" stroke="#1e1e1e" strokeWidth="14"/>
-    <circle cx="180" cy="330" r="24" fill="#6c757d"/>
-    <rect x="90" y="360" width="70" height="40" rx="8" transform="rotate(-40 125 380)" fill="#1e1e1e"/>
-    <rect x="98" y="368" width="54" height="24" rx="4" transform="rotate(-40 125 380)" fill="#f8fafc"/>
-  </svg>
-);
+const LogoCanvaExacto = () => (
+  <div style={{ width: '100%', maxWidth: '340px', display: 'flex', justifyContent: 'center' }}>
+    <svg viewBox="0 0 500 500" width="100%" height="auto" style={{ display: 'block', overflow: 'visible' }}>
+      {/* "Nasa" - Trazo caligráfico exacto de Beauty Salon Script */}
+      <g transform="translate(15, -10)">
+        {/* N */}
+        <path
+          d="M 125 210 C 140 185, 160 148, 172 138 C 182 130, 195 138, 185 158 C 172 185, 142 245, 140 252 C 158 205, 198 135, 218 132 C 228 130, 235 140, 226 160 C 205 205, 188 248, 186 254 C 196 230, 230 185, 252 186 C 265 187, 268 200, 254 222 C 238 248, 220 256, 215 256 C 210 256, 212 248, 218 238"
+          fill="none"
+          stroke="#d97746"
+          strokeWidth="14"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* a */}
+        <path
+          d="M 268 220 C 260 200, 275 186, 292 186 C 310 186, 318 202, 312 225 C 304 250, 280 256, 266 248 C 255 240, 258 222, 274 205 C 290 190, 310 188, 312 215 L 308 248 C 312 238, 322 220, 332 208"
+          fill="none"
+          stroke="#d97746"
+          strokeWidth="13"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* s */}
+        <path
+          d="M 336 215 C 342 195, 358 184, 370 188 C 378 192, 375 204, 362 214 C 345 228, 342 236, 348 248 C 354 258, 372 254, 385 238"
+          fill="none"
+          stroke="#d97746"
+          strokeWidth="13"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* a final con lazo terminal */}
+        <path
+          d="M 400 216 C 392 198, 408 184, 424 185 C 440 186, 446 200, 440 220 C 432 246, 410 254, 396 246 C 386 238, 388 222, 404 206 C 420 192, 436 190, 440 212 L 436 248 C 440 238, 452 222, 464 218 C 475 214, 480 224, 470 240"
+          fill="none"
+          stroke="#d97746"
+          strokeWidth="13"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
 
-const IconoPiano = () => (
-  <svg width="130" height="110" viewBox="0 0 512 400" fill="none">
-    <rect x="20" y="20" width="472" height="360" rx="28" fill="#4a4e69" stroke="#1e1e1e" strokeWidth="18"/>
-    <line x1="20" y1="130" x2="492" y2="130" stroke="#1e1e1e" strokeWidth="16"/>
-    <line x1="50" y1="55" x2="50" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
-    <line x1="75" y1="55" x2="75" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
-    <line x1="100" y1="55" x2="100" y2="95" stroke="#1e1e1e" strokeWidth="14" strokeLinecap="round"/>
-    <rect x="135" y="45" width="180" height="50" rx="8" fill="#80ed99" stroke="#1e1e1e" strokeWidth="12"/>
-    <circle cx="365" cy="70" r="18" fill="#adb5bd" stroke="#1e1e1e" strokeWidth="12"/>
-    <circle cx="430" cy="70" r="18" fill="#f77f00" stroke="#1e1e1e" strokeWidth="12"/>
-    <g transform="translate(36, 145)">
-      <rect x="0" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="62" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="124" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="186" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="248" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="310" y="0" width="60" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="372" y="0" width="68" height="220" fill="#f8fafc" stroke="#1e1e1e" strokeWidth="12"/>
-      <rect x="42" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
-      <rect x="106" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
-      <rect x="230" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
-      <rect x="292" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
-      <rect x="354" y="0" width="36" height="130" rx="6" fill="#1e1e1e"/>
-    </g>
-  </svg>
-);
+      {/* "CIFRAS" - Sifonn / Century Gothic Bold */}
+      <text
+        x="250"
+        y="325"
+        textAnchor="middle"
+        fontFamily="'Century Gothic', 'Lexend', sans-serif"
+        fontSize="76"
+        fontWeight="900"
+        fill="#d4d8e2"
+        letterSpacing="2.5px"
+      >
+        CIFRAS
+      </text>
 
-const IconoBateria = () => (
-  <svg width="130" height="130" viewBox="0 0 512 512" fill="none">
-    <rect x="135" y="70" width="110" height="75" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
-    <rect x="130" y="60" width="120" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
-    <rect x="275" y="70" width="110" height="75" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
-    <rect x="270" y="60" width="120" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
-    <rect x="25" y="190" width="130" height="170" rx="16" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
-    <rect x="20" y="180" width="140" height="24" rx="12" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
-    <line x1="55" y1="230" x2="55" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
-    <line x1="90" y1="230" x2="90" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
-    <line x1="125" y1="230" x2="125" y2="310" stroke="#1e1e1e" strokeWidth="12" strokeLinecap="round"/>
-    <rect x="350" y="240" width="140" height="60" rx="14" fill="#b4533c" stroke="#1e1e1e" strokeWidth="14"/>
-    <rect x="345" y="230" width="150" height="22" rx="10" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="12"/>
-    <circle cx="260" cy="350" r="115" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="20"/>
-    <circle cx="260" cy="350" r="85" fill="#f6bd60" stroke="#1e1e1e" strokeWidth="14" strokeDasharray="140 30"/>
-  </svg>
+      {/* "JESÚS ES EL SEÑOR" */}
+      <text
+        x="250"
+        y="382"
+        textAnchor="middle"
+        fontFamily="'Century Gothic', 'Lexend', sans-serif"
+        fontSize="21"
+        fontWeight="800"
+        fill="#f6d860"
+        letterSpacing="4.5px"
+      >
+        JESÚS ES EL SEÑOR
+      </text>
+    </svg>
+  </div>
 );
 
 /* -------------------------------------------------------------------------- */
-/*  Iconos SVG Auxiliares                                                     */
+/* Iconos SVG Auxiliares                                                     */
 /* -------------------------------------------------------------------------- */
 function Icon({ name, size = 20 }) {
   const common = {
@@ -116,15 +133,13 @@ function Icon({ name, size = 20 }) {
       return <svg {...common}><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></svg>;
     case 'heart':
       return <svg {...common}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>;
-    case 'chevron':
-      return <svg {...common}><path d="m9 6 6 6-6 6" /></svg>;
     default:
       return null;
   }
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Música y Transposición                                                    */
+/* Música y Transposición                                                    */
 /* -------------------------------------------------------------------------- */
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const FLAT_TO_SHARP = { Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#' };
@@ -199,14 +214,14 @@ function calcularDiagramaAcorde(nombreAcorde) {
 
   let t6 = (semitonoRaiz - 4 + 12) % 12;
   if (t6 >= 1 && t6 <= 8) {
-    return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6 + 2, t6, t6] };
+    return { baseFret: t6, barre: { fret: t6, from: 0, to: 5 }, frets: [t6, t6 + 2, t6 + 2, t6 + 1, t6, t6] };
   }
   let t5 = (semitonoRaiz - 9 + 12) % 12;
   return { baseFret: t5, barre: { fret: t5, from: 1, to: 5 }, frets: [-1, t5, t5 + 2, t5 + 2, t5 + 2, t5] };
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Diagrama Acorde con Tipografía Lexend                                     */
+/* Diagrama de Acorde con Tipografía Lexend                                  */
 /* -------------------------------------------------------------------------- */
 const STRINGS = 6;
 const FRETS = 4;
@@ -372,9 +387,7 @@ const FONT_SIZES = [14, 16, 18, 21, 24];
 const SPEEDS = [0.5, 1, 1.5, 2];
 
 export default function App() {
-  const [faseIntro, setFaseIntro] = useState('punto');
   const [ocultarSplash, setOcultarSplash] = useState(false);
-
   const [vistaActual, setVistaActual] = useState('menu');
   const [categoriaSel, setCategoriaSel] = useState('Suplementarios');
   const [modoOscuro, setModoOscuro] = useState(true);
@@ -400,7 +413,7 @@ export default function App() {
 
   const scrollRef = useRef(null);
 
-  // Paleta oficial
+  // Paleta oficial V0
   const t = modoOscuro ? {
     bg: '#0b1120',
     surface: '#111a2e',
@@ -430,7 +443,7 @@ export default function App() {
   };
 
   const [himnos, setHimnos] = useState(() => {
-    const local = localStorage.getItem('cifra_nasa_v14');
+    const local = localStorage.getItem('cifra_nasa_v20');
     return local ? JSON.parse(local) : [
       {
         id: 1,
@@ -528,25 +541,16 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   const [recientes, setRecientes] = useState([himnos[0], himnos[1]]);
   const [favoritos, setFavoritos] = useState([himnos[0]]);
 
-  // Intro cronometrada
+  // Splash de entrada con duración de 2.6s
   useEffect(() => {
-    const t1 = setTimeout(() => setFaseIntro('guitarra'), 700);
-    const t2 = setTimeout(() => setFaseIntro('piano'), 1700);
-    const t3 = setTimeout(() => setFaseIntro('bateria'), 2700);
-    const t4 = setTimeout(() => setFaseIntro('nasa'), 3700);
-    const t5 = setTimeout(() => setFaseIntro('bienvenida'), 4900);
-    const t6 = setTimeout(() => {
-      setFaseIntro('listo');
-      setTimeout(() => setOcultarSplash(true), 400);
-    }, 6200);
-    return () => {
-      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
-      clearTimeout(t4); clearTimeout(t5); clearTimeout(t6);
-    };
+    const splashTimer = setTimeout(() => {
+      setOcultarSplash(true);
+    }, 2600);
+    return () => clearTimeout(splashTimer);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cifra_nasa_v14', JSON.stringify(himnos));
+    localStorage.setItem('cifra_nasa_v20', JSON.stringify(himnos));
   }, [himnos]);
 
   // Auto-scroll loop
@@ -686,62 +690,45 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
   return (
     <div style={{ minHeight: '100vh', fontFamily: "'Lexend', sans-serif", backgroundColor: t.bg, color: t.text, transition: 'background 0.3s ease, color 0.3s ease' }}>
       
-      {/* Reglas de impresión y utilidades */}
       <style>{`
-        @keyframes zoomPunto {
-          0% { transform: scale(0.4); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
+        /* Animación suave para la entrada y salida del splash */
+        @keyframes animLogoEntrada {
+          0% { opacity: 0; transform: scale(0.92); filter: blur(4px); }
+          100% { opacity: 1; transform: scale(1); filter: blur(0); }
         }
-        .cn-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+        @keyframes fadeOutSplash {
+          0% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(1.04); }
+        }
+        
+        .cn-root * { box-sizing: border-box; }
+        .cn-scroll { scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory; }
         .cn-scroll::-webkit-scrollbar { display: none; }
-        .cn-press { transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease; }
+        .cn-press { transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; border: none; font-family: inherit; }
         .cn-press:active { transform: scale(0.97); }
+        .cn-root input { font-family: inherit; }
+        .cn-root input::placeholder { color: ${t.faint}; }
+        .cn-card:hover { border-color: ${t.borderStrong} !important; }
 
         @media print {
-          @page {
-            size: A4 portrait;
-            margin: 14mm 16mm;
-          }
+          @page { size: A4 portrait; margin: 14mm 16mm; }
           body, html {
             background: #ffffff !important;
             color: #000000 !important;
             font-family: 'Lexend', sans-serif !important;
             -webkit-print-color-adjust: exact;
           }
-          .no-imprimir {
-            display: none !important;
-          }
-          .contenedor-visor {
-            max-width: 100% !important;
-            height: auto !important;
-            padding: 0 !important;
-            margin: 0 !important;
-          }
+          .no-imprimir { display: none !important; }
+          .contenedor-visor { max-width: 100% !important; height: auto !important; padding: 0 !important; margin: 0 !important; }
           .header-himno-pdf {
             text-align: center !important;
             margin-bottom: 20px !important;
             padding-bottom: 12px !important;
             border-bottom: 2px solid #e2e8f0 !important;
           }
-          .header-himno-pdf h1 {
-            font-size: 24pt !important;
-            font-weight: 800 !important;
-            color: #000000 !important;
-            margin: 0 0 6px 0 !important;
-          }
-          .header-himno-pdf p {
-            font-size: 11pt !important;
-            color: #475569 !important;
-            margin: 0 0 10px 0 !important;
-          }
-          .header-himno-pdf .meta {
-            display: flex !important;
-            justify-content: center !important;
-            gap: 20px !important;
-            font-size: 10pt !important;
-            font-weight: 700 !important;
-            color: #334155 !important;
-          }
+          .header-himno-pdf h1 { font-size: 24pt !important; font-weight: 800 !important; color: #000000 !important; margin: 0 0 6px 0 !important; }
+          .header-himno-pdf p { font-size: 11pt !important; color: #475569 !important; margin: 0 0 10px 0 !important; }
+          .header-himno-pdf .meta { display: flex !important; justify-content: center !important; gap: 20px !important; font-size: 10pt !important; font-weight: 700 !important; color: #334155 !important; }
           .layout-partitura-pdf {
             display: flex !important;
             flex-direction: row !important;
@@ -749,82 +736,35 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             align-items: flex-start !important;
             gap: 24px !important;
           }
-          .area-partitura {
-            flex: 1 !important;
-            padding: 0 !important;
-            font-size: 13pt !important;
-            line-height: 1.5 !important;
-          }
-          .area-partitura * {
-            color: #000000 !important;
-          }
-          .carrusel-acordes {
-            width: 86px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 14px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-          }
-          .carrusel-acordes figure {
-            background: #ffffff !important;
-            border: 1px solid #cbd5e1 !important;
-            box-shadow: none !important;
-            width: 82px !important;
-            padding: 6px !important;
-          }
-          .carrusel-acordes figcaption {
-            color: #000000 !important;
-            font-size: 10pt !important;
-          }
-          .carrusel-acordes svg text,
-          .carrusel-acordes svg line,
-          .carrusel-acordes svg rect {
-            stroke: #000000 !important;
-            fill: #000000 !important;
-          }
+          .area-partitura { flex: 1 !important; padding: 0 !important; font-size: 13pt !important; line-height: 1.5 !important; }
+          .area-partitura * { color: #000000 !important; }
+          .carrusel-acordes { width: 86px !important; display: flex !important; flex-direction: column !important; gap: 14px !important; margin: 0 !important; padding: 0 !important; }
+          .carrusel-acordes figure { background: #ffffff !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; width: 82px !important; padding: 6px !important; }
+          .carrusel-acordes figcaption { color: #000000 !important; font-size: 10pt !important; }
+          .carrusel-acordes svg text, .carrusel-acordes svg line, .carrusel-acordes svg rect { stroke: #000000 !important; fill: #000000 !important; }
         }
       `}</style>
 
-      {/* SPLASH ANIMATION */}
+      {/* PANTALLA SPLASH CON EL LOGO EXACTO DE CANVA */}
       {!ocultarSplash && (
         <div style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: '#9a3412',
+          backgroundColor: '#0b1120',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 9999,
-          padding: '20px',
-          textAlign: 'center',
-          transition: 'opacity 0.4s ease',
-          opacity: faseIntro === 'listo' ? 0 : 1,
-          pointerEvents: faseIntro === 'listo' ? 'none' : 'auto'
+          padding: '24px',
+          animation: 'fadeOutSplash 0.5s ease 2.1s forwards'
         }}>
-          {faseIntro === 'punto' && (
-            <div style={{ width: '22px', height: '22px', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 0 25px #fff', animation: 'zoomPunto 0.5s ease-out' }} />
-          )}
-          {faseIntro === 'guitarra' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoGuitarra /></div>}
-          {faseIntro === 'piano' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoPiano /></div>}
-          {faseIntro === 'bateria' && <div style={{ animation: 'zoomPunto 0.35s forwards' }}><IconoBateria /></div>}
-          {faseIntro === 'nasa' && (
-            <div style={{ animation: 'zoomPunto 0.4s forwards' }}>
-              <h1 style={{ fontSize: '52px', fontWeight: '800', color: '#fff', letterSpacing: '6px', margin: 0 }}>NASA</h1>
-              <p style={{ color: '#fed7aa', fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '6px' }}>Cifra • Himnario</p>
-            </div>
-          )}
-          {faseIntro === 'bienvenida' && (
-            <div style={{ animation: 'zoomPunto 0.45s forwards' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#ffedd5', margin: '0 0 4px 0' }}>Bienvenido</h2>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: 0 }}>Jesús es el Señor</p>
-            </div>
-          )}
+          <div style={{ animation: 'animLogoEntrada 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
+            <LogoCanvaExacto />
+          </div>
         </div>
       )}
 
-      {/* MENÚ PRINCIPAL CON PADDINGS MÓVILES AJUSTADOS */}
+      {/* MENÚ PRINCIPAL */}
       {vistaActual === 'menu' && (
         <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
           <div style={{
@@ -838,13 +778,13 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             boxSizing: 'border-box'
           }}>
             
-            {/* Header del Menú con márgenes seguros */}
+            {/* Header del Menú */}
             <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, paddingBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{
                   background: t.accent,
                   color: t.onAccent,
-                  fontWeight: 700,
+                  fontWeight: 800,
                   fontSize: 15,
                   padding: '6px 12px',
                   borderRadius: 10,
@@ -898,7 +838,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
               </div>
             </header>
 
-            {/* Búsqueda Rápida Funcional */}
+            {/* Búsqueda Rápida */}
             <section aria-label="Búsqueda rápida">
               <label style={{
                 display: 'flex',
@@ -959,7 +899,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
               )}
             </section>
 
-            {/* Bloques de Categorías y Acciones */}
+            {/* Categorías y Acciones */}
             {query.trim() === '' && (
               <>
                 <section aria-labelledby="cats">
@@ -974,7 +914,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       <button
                         key={c.key}
                         type="button"
-                        className="cn-press"
+                        className="cn-press cn-card"
                         onClick={() => { setCategoriaSel(c.key); setVistaActual('lista'); }}
                         style={{
                           background: t.surface,
@@ -987,7 +927,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           gap: 16,
                           padding: 16,
                           minHeight: 138,
-                          cursor: 'pointer'
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -1027,7 +966,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </div>
                 </section>
 
-                {/* Botón Destacado: Agregar Himno */}
+                {/* Botón Principal: Agregar Himno */}
                 <section>
                   <button
                     type="button"
@@ -1046,7 +985,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       color: '#fff',
                       fontWeight: 700,
                       fontSize: 15,
-                      cursor: 'pointer',
                       boxShadow: `0 14px 30px rgba(224,122,79,0.28)`,
                       fontFamily: "'Lexend', sans-serif"
                     }}
@@ -1085,7 +1023,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           color: tab === 'recent' ? t.accent : t.muted,
                           fontSize: 12.5,
                           fontWeight: 700,
-                          cursor: 'pointer'
                         }}
                       >
                         <Icon name="clock" size={14} />
@@ -1106,7 +1043,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           color: tab === 'fav' ? t.accent : t.muted,
                           fontSize: 12.5,
                           fontWeight: 700,
-                          cursor: 'pointer'
                         }}
                       >
                         <Icon name="heart" size={14} />
@@ -1120,7 +1056,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                       <button
                         key={s.id}
                         type="button"
-                        className="cn-press"
+                        className="cn-press cn-card"
                         onClick={() => seleccionarHimno(s)}
                         style={{
                           background: t.surface,
@@ -1134,7 +1070,6 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                           flexDirection: 'column',
                           gap: 10,
                           textAlign: 'left',
-                          cursor: 'pointer'
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1166,7 +1101,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
                   </div>
                 </section>
 
-                {/* Footer con margen para no pegarse */}
+                {/* Footer */}
                 <footer style={{ marginTop: 'auto', padding: '16px 0 28px', textAlign: 'center', fontSize: 12, color: t.faint }}>
                   Jesús es el Señor <span style={{ color: t.accent }}>•</span> Cifra NASA v1.0
                 </footer>
@@ -1179,10 +1114,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* CATEGORÍAS */}
       {vistaActual === 'categorias' && (
-        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px' }}>
+        <main style={{ maxWidth: '440px', margin: '20px auto', padding: '0 16px', boxSizing: 'border-box' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>Categorías</h2>
-            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', fontFamily: "'Lexend', sans-serif" }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {["Suplementarios", "Complementarios", "Himnos", "Nuevos"].map(cat => (
@@ -1201,10 +1136,10 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
 
       {/* LISTA DE HIMNOS */}
       {vistaActual === 'lista' && (
-        <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px' }}>
+        <main style={{ maxWidth: '480px', margin: '20px auto', padding: '0 16px', boxSizing: 'border-box' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0 }}>{categoriaSel}</h2>
-            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}>← Volver</button>
+            <button onClick={navegarAtras} style={{ background: t.surface2, border: 'none', color: t.text, padding: '6px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', fontFamily: "'Lexend', sans-serif" }}>← Volver</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {himnos.filter(h => h.categoria === categoriaSel).map(h => {
@@ -1228,21 +1163,21 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
       {vistaActual === 'visor' && (
         <div className="contenedor-visor" style={{ height: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '520px', margin: '0 auto', position: 'relative' }}>
           
-          {/* Barra Superior con Controles */}
+          {/* Barra Superior */}
           <header className="no-imprimir" style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', backdropFilter: 'blur(12px)', background: modoOscuro ? 'rgba(11, 17, 32, 0.92)' : 'rgba(246, 244, 240, 0.92)', borderBottom: `1px solid ${t.border}` }}>
             <button onClick={navegarAtras} style={{ background: 'transparent', border: 'none', color: t.text, cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              {/* Selector de Transposición */}
+              {/* Transposición */}
               <div style={{ display: 'flex', alignItems: 'center', background: t.surface2, borderRadius: '999px', padding: '2px 4px' }}>
                 <button onClick={() => setSemitonos(s => Math.max(-11, s - 1))} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: t.text, cursor: 'pointer', fontWeight: 'bold' }}>-</button>
                 <span style={{ width: '32px', textAlign: 'center', fontFamily: "'Lexend', sans-serif", fontSize: '12px', fontWeight: '800', color: t.accent }}>{labelSemitonos}</span>
                 <button onClick={() => setSemitonos(s => Math.min(11, s + 1))} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: t.text, cursor: 'pointer', fontWeight: 'bold' }}>+</button>
               </div>
 
-              {/* Selector de Tamaño de Letra */}
+              {/* Tamaño Letra */}
               <div style={{ display: 'flex', alignItems: 'center', background: t.surface2, borderRadius: '999px', padding: '2px 4px' }}>
                 <button onClick={() => setFontIdx(i => Math.max(0, i - 1))} disabled={fontIdx === 0} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: t.text, cursor: 'pointer', fontSize: '11px', fontWeight: '800', opacity: fontIdx === 0 ? 0.3 : 1 }}>A-</button>
                 <button onClick={() => setFontIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))} disabled={fontIdx === FONT_SIZES.length - 1} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', background: 'transparent', color: t.text, cursor: 'pointer', fontSize: '13px', fontWeight: '800', opacity: fontIdx === FONT_SIZES.length - 1 ? 0.3 : 1 }}>A+</button>
@@ -1266,7 +1201,7 @@ Y así por el ca[F]mino estrecho [Dm]sigo,
             </div>
           </header>
 
-          {/* Área de Lectura Scrollable */}
+          {/* Área de Lectura */}
           <div ref={scrollRef} className="cn-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px' }}>
             
             {/* Header del Himno */}
